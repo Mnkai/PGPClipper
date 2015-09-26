@@ -2,47 +2,48 @@ package moe.minori.pgpclipper;
 
 import android.app.Activity;
 import android.app.PendingIntent;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import org.openintents.openpgp.OpenPgpDecryptionResult;
 import org.openintents.openpgp.OpenPgpSignatureResult;
 import org.openintents.openpgp.util.OpenPgpApi;
+import org.openintents.openpgp.util.OpenPgpKeyPreference;
 import org.openintents.openpgp.util.OpenPgpServiceConnection;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 
 /**
  * Created by Minori on 2015-09-26.
  */
-public class PGPClipperResultShowActivity extends Activity {
+public class PGPClipperQuickReplyActivity extends Activity {
 
     OpenPgpServiceConnection serviceConnection;
 
-    public static final int REQUEST_CODE_DECRYPT_AND_VERIFY = 9913;
+    public static final int REQUEST_CODE_ENCRYPT = 9911;
+    public static final int REQUEST_CODE_SIGN_AND_ENCRYPT = 9912;
 
     public static final String DATA = "DATA";
-    public static ArrayList<String> KEY_ID;
 
     private Intent intent;
 
-    TextView sigStatus;
-    TextView decStatus;
-    EditText decResult;
-
-    boolean isReplyable = false;
+    CheckBox sigCheckBox;
+    EditText replyTextField;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,11 +51,10 @@ public class PGPClipperResultShowActivity extends Activity {
 
         intent = getIntent();
 
-        setContentView(R.layout.resultactivitylayout);
+        setContentView(R.layout.quickreplyactivitylayout);
 
-        sigStatus = (TextView) findViewById(R.id.sigStatusTitle);
-        decStatus = (TextView) findViewById(R.id.decryptionStatusTitle);
-        decResult = (EditText) findViewById(R.id.deecryptionResultText);
+        sigCheckBox = (CheckBox) findViewById(R.id.signatureCheck);
+        replyTextField = (EditText) findViewById(R.id.replyText);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
@@ -72,18 +72,16 @@ public class PGPClipperResultShowActivity extends Activity {
             serviceConnection = new OpenPgpServiceConnection(this, currentPgpProvider);
             serviceConnection.bindToService();
 
-            tryDecryption();
-
         }
     }
 
-    private void tryDecryption ()
+    private void tryEncryption ()
     {
         if ( serviceConnection.isBound() )
         {
             if ( intent != null )
             {
-                attemptPgpApiAccess(intent.getStringExtra(DATA));
+                attemptPgpApiAccess(replyTextField.getText().toString());
             }
         }
         else
@@ -92,7 +90,7 @@ public class PGPClipperResultShowActivity extends Activity {
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    tryDecryption();
+                    tryEncryption();
                 }
             }, 500);
         }
@@ -123,7 +121,45 @@ public class PGPClipperResultShowActivity extends Activity {
             {
                 case 5298:
                 {
-                    tryDecryption();
+                    data.putExtra(OpenPgpApi.EXTRA_USER_IDS, intent.getStringArrayExtra("KEY_ID"));
+                    data.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true);
+                    if ( sigCheckBox.isChecked() )
+                    {
+                        // signature + encryption
+
+                        data.setAction(OpenPgpApi.ACTION_SIGN_AND_ENCRYPT);
+                    }
+                    else
+                    {
+                        // only encryption
+
+                        data.setAction(OpenPgpApi.ACTION_ENCRYPT);
+
+                    }
+
+                    InputStream is;
+                    ByteArrayOutputStream os = new ByteArrayOutputStream();
+
+                    try
+                    {
+                        is = new ByteArrayInputStream(replyTextField.getText().toString().getBytes("UTF-8"));
+                    }
+                    catch (UnsupportedEncodingException e)
+                    {
+                        e.printStackTrace();
+                        return;
+                    }
+
+                    OpenPgpApi api = new OpenPgpApi(this, serviceConnection.getService());
+
+                    if ( sigCheckBox.isChecked() )
+                    {
+                        api.executeApiAsync(data, is, os, new CallBack(os, REQUEST_CODE_SIGN_AND_ENCRYPT));
+                    }
+                    else
+                    {
+                        api.executeApiAsync(data, is, os, new CallBack(os, REQUEST_CODE_ENCRYPT));
+                    }
                 }
             }
         }
@@ -132,10 +168,24 @@ public class PGPClipperResultShowActivity extends Activity {
 
     private void attemptPgpApiAccess (String input)
     {
-        // PGP data (possibly) detected, try using OpenPGP API
+        // try encryption (optionally signature) and copy data into clipboard
 
         Intent data = new Intent();
-        data.setAction(OpenPgpApi.ACTION_DECRYPT_VERIFY);
+        data.putExtra(OpenPgpApi.EXTRA_USER_IDS, intent.getStringArrayExtra("KEY_ID"));
+        data.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true);
+        if ( sigCheckBox.isChecked() )
+        {
+            // signature + encryption
+
+            data.setAction(OpenPgpApi.ACTION_SIGN_AND_ENCRYPT);
+        }
+        else
+        {
+            // only encryption
+
+            data.setAction(OpenPgpApi.ACTION_ENCRYPT);
+
+        }
 
         InputStream is;
         ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -151,35 +201,21 @@ public class PGPClipperResultShowActivity extends Activity {
         }
 
         OpenPgpApi api = new OpenPgpApi(this, serviceConnection.getService());
-        api.executeApiAsync(data, is, os, new CallBack(os, REQUEST_CODE_DECRYPT_AND_VERIFY));
+
+        if ( sigCheckBox.isChecked() )
+        {
+            api.executeApiAsync(data, is, os, new CallBack(os, REQUEST_CODE_SIGN_AND_ENCRYPT));
+        }
+        else
+        {
+            api.executeApiAsync(data, is, os, new CallBack(os, REQUEST_CODE_ENCRYPT));
+        }
+
     }
 
     public void onClick (View v)
     {
-        if ( isReplyable )
-        {
-
-            // start quick reply activity
-            Intent intent = new Intent(this, PGPClipperQuickReplyActivity.class);
-            intent.putExtra("KEY_ID", convertToStringArray(KEY_ID));
-
-
-            startActivity(intent);
-            overridePendingTransition(0, 0);
-            finish();
-        }
-    }
-
-    private String[] convertToStringArray (ArrayList<String> input)
-    {
-        String[] toReturn = new String[input.size()];
-
-        for (int i=0; i<input.size(); i++)
-        {
-            toReturn[i] = input.get(i);
-        }
-
-        return toReturn;
+        tryEncryption();
     }
 
     private class CallBack implements OpenPgpApi.IOpenPgpCallback
@@ -204,34 +240,12 @@ public class PGPClipperResultShowActivity extends Activity {
                     {
                         //TODO: Use this somewhere!
                         String finalResult = os.toString("UTF-8");
-                        OpenPgpSignatureResult signatureResult = result.getParcelableExtra(OpenPgpApi.RESULT_SIGNATURE);
-                        OpenPgpDecryptionResult decryptionResult = result.getParcelableExtra(OpenPgpApi.RESULT_DECRYPTION);
 
-                        if ( signatureResult.getResult() == 1 )
-                        {
-                            sigStatus.setText(sigStatus.getText() + "O \n(" + signatureResult.getPrimaryUserId() + ")");
-                            isReplyable = true;
-                            KEY_ID = signatureResult.getUserIds();
-                        }
-                        else
-                        {
-                            sigStatus.setText(sigStatus.getText() + "X");
-                            isReplyable = false;
-                            findViewById(R.id.fastReplyIndicator).setVisibility(View.INVISIBLE);
-                        }
+                        ClipboardManager clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("label", finalResult);
+                        clipboardManager.setPrimaryClip(clip);
 
-
-                        if ( decryptionResult.getResult() == 1)
-                        {
-                            decStatus.setText(decStatus.getText() + "O");
-                        }
-                        else
-                            decStatus.setText(decStatus.getText() + "X");
-
-                        if ( finalResult != null )
-                            decResult.setText(finalResult);
-                        else
-                            decResult.setText("Cannot process");
+                        finish();
 
                     }
                     catch (UnsupportedEncodingException e) {
@@ -246,7 +260,7 @@ public class PGPClipperResultShowActivity extends Activity {
 
                     try
                     {
-                        PGPClipperResultShowActivity.this.startIntentSenderFromChild(PGPClipperResultShowActivity.this, pi.getIntentSender(), 5298, null, 0, 0, 0);
+                        PGPClipperQuickReplyActivity.this.startIntentSenderFromChild(PGPClipperQuickReplyActivity.this, pi.getIntentSender(), 5298, null, 0, 0, 0);
                     }
                     catch (IntentSender.SendIntentException e)
                     {
@@ -258,9 +272,7 @@ public class PGPClipperResultShowActivity extends Activity {
                 {
                     //TODO: Show user error dialog
 
-                    sigStatus.setText(sigStatus.getText() + "X");
-                    decStatus.setText(decStatus.getText() + "X");
-                    decResult.setText("Cannot process");
+                    replyTextField.setText("Error, cannot continue. Send bug report to author.");
 
                     break;
                 }

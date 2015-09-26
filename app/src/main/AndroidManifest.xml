@@ -30,6 +30,9 @@
         <activity android:name=".PGPClipperResultShowActivity"
             android:theme="@style/PseudoDialogDarkTheme"/>
 
+        <activity android:name=".PGPClipperQuickReplyActivity"
+            android:theme="@style/PseudoDialogDarkTheme"/>
+
     </application>
 
 </manifest>

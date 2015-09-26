@@ -49,6 +49,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:cursorVisible="false"
+        android:onClick="onClick"
         android:layout_alignRight="@+id/decryptionStatusTitle"
         android:layout_alignEnd="@+id/decryptionStatusTitle" />
 
