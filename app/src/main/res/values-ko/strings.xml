@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="appVersionTitleString">버전</string>
+    <string name="enabledService">서비스 활성화</string>
+    <string name="enabledServiceSummary">이 옵션을 선택해 PGPClipper가 백그라운드에서 계속 실행되도록 허용합니다.\n이 어플리케이션은 클립보드의 데이터를 **접근 할 것입니다**.</string>
+    <string name="issueTrackingTitleString">이슈 트래킹 및 소스코드</string>
+    <string name="licenseTitleString">라이센스</string>
+    <string name="pgpServiceProviderAppTitleString">OpenPGP 서비스 제공자 상태</string>
+    <string name="thirdPartyLicenseTitleString">서드파티 라이센스</string>
+</resources>

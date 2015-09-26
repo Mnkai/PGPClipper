@@ -1,0 +1,31 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <CheckBoxPreference
+        android:key="enabledCheckBox"
+        android:title="@string/enabledService"
+        android:summary="@string/enabledServiceSummary"
+        android:defaultValue="false" />
+
+
+    <org.openintents.openpgp.util.OpenPgpAppPreference
+        android:key="pgpServiceProviderApp"
+        android:title="@string/pgpServiceProviderAppTitleString" />
+
+
+    <Preference
+        android:title="@string/appVersionTitleString"
+        android:summary="@string/appVersionString" />
+
+    <Preference
+        android:title="@string/licenseTitleString"
+        android:summary="@string/licenseContentString" />
+
+    <Preference
+        android:title="@string/thirdPartyLicenseTitleString"
+        android:summary="@string/thirdPartyLibraryContentString" />
+
+    <Preference
+        android:title="@string/issueTrackingTitleString"
+        android:summary="@string/issueTrackingContentString" />
+
+</PreferenceScreen>

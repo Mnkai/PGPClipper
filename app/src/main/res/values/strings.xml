@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name" translatable="false">PGPClipper</string>
+    <string name="enabledService">Enable Service</string>
+    <string name="enabledServiceSummary">Check this box to allow PGPClipper stay alive in background.\nNote that this application *will* access clipboard data.</string>
+    <string name="pgpServiceProviderAppTitleString">OpenPGP Service Provider status</string>
+    <string name="appVersionString" translatable="false">0.1 (Initial Release)</string>
+    <string name="appVersionTitleString">Version</string>
+    <string name="licenseTitleString">License</string>
+    <string name="licenseContentString" translatable="false">Apache License 2.0</string>
+    <string name="thirdPartyLicenseTitleString">Third Party License</string>
+    <string name="thirdPartyLibraryContentString" translatable="false">OpenPGP API Library - Apache License 2.0</string>
+    <string name="issueTrackingTitleString">Issue tracking and source code</string>
+    <string name="issueTrackingContentString" translatable="false">GitHub</string>
+</resources>
