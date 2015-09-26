@@ -28,7 +28,7 @@
         </receiver>
 
         <activity android:name=".PGPClipperResultShowActivity"
-            android:theme="@style/PseudoDialogTheme"/>
+            android:theme="@style/PseudoDialogDarkTheme"/>
 
     </application>
 
