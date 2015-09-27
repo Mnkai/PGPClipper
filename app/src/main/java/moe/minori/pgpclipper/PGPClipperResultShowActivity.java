@@ -46,6 +46,19 @@ public class PGPClipperResultShowActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String currentTheme = sharedPreferences.getString("themeSelection", "dark");
+
+        switch (currentTheme)
+        {
+            case "dark":
+                setTheme(R.style.PseudoDialogDarkTheme);
+                break;
+            case "light":
+                setTheme(R.style.PseudoDialogLightTheme);
+                break;
+        }
+
         super.onCreate(savedInstanceState);
 
         intent = getIntent();

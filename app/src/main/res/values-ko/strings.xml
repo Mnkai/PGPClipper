@@ -16,4 +16,7 @@
     <string name="NotificationTickerText">PGP 데이터로 예상되는 내용 감지됨</string>
     <string name="NotificationTitleText">PGP 데이터로 예상되는 내용 감지됨</string>
     <string name="NotificationContentText">알림을 눌러 처리를 시도합니다.</string>
+    <string name="darkText">어두운 테마</string>
+    <string name="lightText">밝은 테마</string>
+    <string name="themeStyleText">테마 설정</string>
 </resources>

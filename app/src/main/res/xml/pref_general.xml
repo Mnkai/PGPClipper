@@ -11,6 +11,9 @@
         android:key="pgpServiceProviderApp"
         android:title="@string/pgpServiceProviderAppTitleString" />
 
+    <ListPreference
+        android:key="themeSelection"
+        android:title="@string/themeStyleText" />
 
     <Preference
         android:title="@string/appVersionTitleString"

@@ -1,10 +1,13 @@
 package moe.minori.pgpclipper;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 
 public class PGPClipperSettingsActivity extends AppCompatActivity {
@@ -71,6 +74,42 @@ public class PGPClipperSettingsActivity extends AppCompatActivity {
                     return true;
                 }
             });
+
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+            final ListPreference themePref = (ListPreference) findPreference("themeSelection");
+
+            themePref.setEntryValues(R.array.themes_values);
+            themePref.setEntries(R.array.themes);
+
+            String currentVal = sharedPreferences.getString("themeSelection", "dark");
+            switch (currentVal)
+            {
+                case "dark":
+                    themePref.setSummary(getResources().getString(R.string.darkText));
+                    break;
+                case "light":
+                    themePref.setSummary(getResources().getString(R.string.lightText));
+                    break;
+            }
+
+            themePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+
+                    switch ((String) newValue)
+                    {
+                        case "dark":
+                            themePref.setSummary(getResources().getString(R.string.darkText));
+                            break;
+                        case "light":
+                            themePref.setSummary(getResources().getString(R.string.lightText));
+                            break;
+                    }
+
+                    return true;
+                }
+            });
+
 
         }
     }

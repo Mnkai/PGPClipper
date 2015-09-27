@@ -20,4 +20,7 @@
     <string name="NotificationTickerText">Possible PGP Data Detected</string>
     <string name="NotificationTitleText">Possible PGP Data Detected</string>
     <string name="NotificationContentText">Attempt to process it?</string>
+    <string name="darkText">Dark</string>
+    <string name="lightText">Light</string>
+    <string name="themeStyleText">Theme Setting</string>
 </resources>
