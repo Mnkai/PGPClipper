@@ -81,7 +81,7 @@ public class PGPClipperService extends Service {
                         PendingIntent pendingIntent = PendingIntent.getService(getApplicationContext(), 0, intentToLaunchWhenNotificationClicked, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);
 
                         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(getApplicationContext())
-                                .setSmallIcon(R.mipmap.ic_launcher)
+                                .setSmallIcon(R.mipmap.icon)
                                 .setTicker(getString(R.string.NotificationTickerText))
                                 .setContentTitle(getString(R.string.NotificationTitleText))
                                 .setContentText(getString(R.string.NotificationContentText))
