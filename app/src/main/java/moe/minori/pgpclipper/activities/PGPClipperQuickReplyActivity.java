@@ -1,4 +1,4 @@
-package moe.minori.pgpclipper;
+package moe.minori.pgpclipper.activities;
 
 import android.app.Activity;
 import android.app.PendingIntent;
@@ -9,24 +9,21 @@ import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.TextView;
 
-import org.openintents.openpgp.OpenPgpDecryptionResult;
-import org.openintents.openpgp.OpenPgpSignatureResult;
 import org.openintents.openpgp.util.OpenPgpApi;
-import org.openintents.openpgp.util.OpenPgpKeyPreference;
 import org.openintents.openpgp.util.OpenPgpServiceConnection;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+
+import moe.minori.pgpclipper.R;
 
 /**
  * Created by Minori on 2015-09-26.

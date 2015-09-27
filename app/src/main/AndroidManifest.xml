@@ -10,7 +10,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".PGPClipperSettingsActivity"
+            android:name=".activities.PGPClipperSettingsActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,11 +27,13 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".PGPClipperResultShowActivity"
-            android:theme="@style/PseudoDialogDarkTheme"/>
+        <activity android:name=".activities.PGPClipperResultShowActivity"
+            android:theme="@style/PseudoDialogDarkTheme"
+            android:excludeFromRecents="true" />
 
-        <activity android:name=".PGPClipperQuickReplyActivity"
-            android:theme="@style/PseudoDialogDarkTheme"/>
+        <activity android:name=".activities.PGPClipperQuickReplyActivity"
+            android:theme="@style/PseudoDialogDarkTheme"
+            android:excludeFromRecents="true" />
 
     </application>
 

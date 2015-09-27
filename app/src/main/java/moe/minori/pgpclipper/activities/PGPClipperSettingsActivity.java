@@ -1,4 +1,4 @@
-package moe.minori.pgpclipper;
+package moe.minori.pgpclipper.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,12 +10,21 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 
+import moe.minori.pgpclipper.PGPClipperService;
+import moe.minori.pgpclipper.R;
+
 public class PGPClipperSettingsActivity extends AppCompatActivity {
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         getFragmentManager().beginTransaction().replace(android.R.id.content, new SettingFragment()).commit();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        finish();
     }
 
     public static class SettingFragment extends PreferenceFragment {

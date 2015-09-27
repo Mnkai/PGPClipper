@@ -1,4 +1,4 @@
-package moe.minori.pgpclipper;
+package moe.minori.pgpclipper.activities;
 
 import android.app.Activity;
 import android.app.PendingIntent;
@@ -23,6 +23,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+
+import moe.minori.pgpclipper.R;
 
 /**
  * Created by Minori on 2015-09-26.

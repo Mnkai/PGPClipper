@@ -9,9 +9,9 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
-import android.text.SpannableString;
 import android.util.Log;
 
+import moe.minori.pgpclipper.activities.PGPClipperResultShowActivity;
 import moe.minori.pgpclipper.util.PGPBlockDetector;
 
 /**
