@@ -5,7 +5,7 @@ PGPClipper for Android repository
 Build using Android Studio.
 
 # Google Play Store
-TBA
+https://play.google.com/store/apps/details?id=moe.minori.pgpclipper
 
 # Third Party Licenses
 OpenPGP API Library, Apache License 2.0
