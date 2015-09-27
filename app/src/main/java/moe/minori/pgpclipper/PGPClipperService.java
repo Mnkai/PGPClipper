@@ -82,9 +82,9 @@ public class PGPClipperService extends Service {
 
                         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(getApplicationContext())
                                 .setSmallIcon(R.mipmap.ic_launcher)
-                                .setTicker("Possible PGP Data Detected")
-                                .setContentTitle("Possible PGP Data Detected")
-                                .setContentText("Attempt to process it?")
+                                .setTicker(getString(R.string.NotificationTickerText))
+                                .setContentTitle(getString(R.string.NotificationTitleText))
+                                .setContentText(getString(R.string.NotificationContentText))
                                 .setDefaults(Notification.DEFAULT_LIGHTS)
                                 .setContentIntent(pendingIntent)
                                 .setPriority(NotificationCompat.PRIORITY_MAX)

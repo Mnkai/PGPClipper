@@ -17,4 +17,7 @@
     <string name="signatureStatusText">Signature Status:</string>
     <string name="decryptionStatusText">Decryption Status:</string>
     <string name="fastReplyText">Press result field for fast reply</string>
+    <string name="NotificationTickerText">Possible PGP Data Detected</string>
+    <string name="NotificationTitleText">Possible PGP Data Detected</string>
+    <string name="NotificationContentText">Attempt to process it?</string>
 </resources>
