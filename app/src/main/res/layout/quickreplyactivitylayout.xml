@@ -10,7 +10,7 @@
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Signature Toggle"
+        android:text="@string/signatureToggleText"
         android:id="@+id/signatureCheck"
         android:checked="true"
         android:layout_alignParentTop="true"
@@ -30,7 +30,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Reply"
+        android:text="@string/replyText"
         android:id="@+id/executeBtn"
         android:layout_below="@+id/replyText"
         android:onClick="onClick"

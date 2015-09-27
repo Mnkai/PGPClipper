@@ -7,4 +7,10 @@
     <string name="licenseTitleString">라이센스</string>
     <string name="pgpServiceProviderAppTitleString">OpenPGP 서비스 제공자 상태</string>
     <string name="thirdPartyLicenseTitleString">서드파티 라이센스</string>
+    <string name="decryptionStatusText">복호화 상태: </string>
+    <string name="fastReplyText">결과 필드를 눌러 빠른 답장</string>
+    <string name="processingResultText">처리 결과</string>
+    <string name="replyText">답장</string>
+    <string name="signatureStatusText">서명 상태: </string>
+    <string name="signatureToggleText">서명 활성화</string>
 </resources>

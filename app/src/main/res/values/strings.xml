@@ -11,4 +11,10 @@
     <string name="thirdPartyLibraryContentString" translatable="false">OpenPGP API Library - Apache License 2.0</string>
     <string name="issueTrackingTitleString">Issue tracking and source code</string>
     <string name="issueTrackingContentString" translatable="false">GitHub</string>
+    <string name="signatureToggleText">Signature Toggle</string>
+    <string name="replyText">Reply</string>
+    <string name="processingResultText">Processing Result</string>
+    <string name="signatureStatusText">Signature Status:</string>
+    <string name="decryptionStatusText">Decryption Status:</string>
+    <string name="fastReplyText">Press result field for fast reply</string>
 </resources>
