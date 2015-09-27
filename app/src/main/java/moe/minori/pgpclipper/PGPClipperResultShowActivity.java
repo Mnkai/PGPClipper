@@ -34,7 +34,7 @@ public class PGPClipperResultShowActivity extends Activity {
     public static final int REQUEST_CODE_DECRYPT_AND_VERIFY = 9913;
 
     public static final String DATA = "DATA";
-    public static ArrayList<String> KEY_ID;
+    public static ArrayList<String> KEY_ID = null;
 
     private Intent intent;
 
@@ -42,7 +42,6 @@ public class PGPClipperResultShowActivity extends Activity {
     TextView decStatus;
     EditText decResult;
 
-    boolean isReplyable = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -169,19 +168,15 @@ public class PGPClipperResultShowActivity extends Activity {
 
     public void onClick (View v)
     {
-        if ( isReplyable )
-        {
-
-            // start quick reply activity
-            Intent intent = new Intent(this, PGPClipperQuickReplyActivity.class);
-            if ( KEY_ID != null )
-                intent.putExtra("KEY_ID", convertToStringArray(KEY_ID));
+        // start quick reply activity
+        Intent intent = new Intent(this, PGPClipperQuickReplyActivity.class);
+        if (KEY_ID != null)
+            intent.putExtra("KEY_ID", convertToStringArray(KEY_ID));
 
 
-            startActivity(intent);
-            overridePendingTransition(0, 0);
-            finish();
-        }
+        startActivity(intent);
+        overridePendingTransition(0, 0);
+        finish();
     }
 
     private String[] convertToStringArray (ArrayList<String> input)
@@ -227,14 +222,11 @@ public class PGPClipperResultShowActivity extends Activity {
                         if ( signatureResult.getResult() == 1 )
                         {
                             sigStatus.setText(sigStatus.getText() + "O \n(" + signatureResult.getPrimaryUserId() + ")");
-                            isReplyable = true;
                             KEY_ID = signatureResult.getUserIds();
                         }
                         else
                         {
                             sigStatus.setText(sigStatus.getText() + "X");
-                            isReplyable = false;
-                            findViewById(R.id.fastReplyIndicator).setVisibility(View.INVISIBLE);
                         }
 
 

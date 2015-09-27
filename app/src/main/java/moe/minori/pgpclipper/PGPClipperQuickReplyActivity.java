@@ -133,7 +133,9 @@ public class PGPClipperQuickReplyActivity extends Activity {
             {
                 case 5298:
                 {
-                    data.putExtra(OpenPgpApi.EXTRA_USER_IDS, intent.getStringArrayExtra("KEY_ID"));
+                    String[] keyIDs = intent.getStringArrayExtra("KEY_ID");
+                    if ( keyIDs != null )
+                        data.putExtra(OpenPgpApi.EXTRA_USER_IDS, keyIDs);
                     data.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true);
                     if ( sigCheckBox.isChecked() )
                     {
