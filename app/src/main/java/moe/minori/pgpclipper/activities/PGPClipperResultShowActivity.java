@@ -36,7 +36,7 @@ public class PGPClipperResultShowActivity extends Activity {
     public static final int REQUEST_CODE_DECRYPT_AND_VERIFY = 9913;
 
     public static final String DATA = "DATA";
-    public static ArrayList<String> KEY_ID = null;
+    public ArrayList<String> KEY_ID = null;
 
     private Intent intent;
 
@@ -180,6 +180,7 @@ public class PGPClipperResultShowActivity extends Activity {
         overridePendingTransition(0, 0);
         finish();
     }
+
 
     private String[] convertToStringArray (ArrayList<String> input)
     {
