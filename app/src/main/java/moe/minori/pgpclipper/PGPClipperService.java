@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
+import android.text.SpannableString;
 import android.util.Log;
 
 import moe.minori.pgpclipper.util.PGPBlockDetector;
@@ -62,7 +63,8 @@ public class PGPClipperService extends Service {
                     // get current clipboard data to string
                     String currentData;
 
-                    currentData = (String) clipboardManager.getPrimaryClip().getItemAt(0).getText();
+                    currentData = clipboardManager.getPrimaryClip().getItemAt(0).getText().toString();
+
 
                     // check if this contains ASCII armored PGP data
 
