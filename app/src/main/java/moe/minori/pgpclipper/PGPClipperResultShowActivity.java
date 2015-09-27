@@ -161,7 +161,8 @@ public class PGPClipperResultShowActivity extends Activity {
 
             // start quick reply activity
             Intent intent = new Intent(this, PGPClipperQuickReplyActivity.class);
-            intent.putExtra("KEY_ID", convertToStringArray(KEY_ID));
+            if ( KEY_ID != null )
+                intent.putExtra("KEY_ID", convertToStringArray(KEY_ID));
 
 
             startActivity(intent);
@@ -176,7 +177,10 @@ public class PGPClipperResultShowActivity extends Activity {
 
         for (int i=0; i<input.size(); i++)
         {
-            toReturn[i] = input.get(i);
+            int startIdx = input.get(i).lastIndexOf("<");
+            int endIdx = input.get(i).lastIndexOf(">");
+
+            toReturn[i] = input.get(i).substring(startIdx+1, endIdx);
         }
 
         return toReturn;
