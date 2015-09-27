@@ -17,14 +17,17 @@
         android:summary="@string/appVersionString" />
 
     <Preference
+        android:key="licensePreferenceItem"
         android:title="@string/licenseTitleString"
         android:summary="@string/licenseContentString" />
 
     <Preference
+        android:key="thirdPartyLicensePreferenceItem"
         android:title="@string/thirdPartyLicenseTitleString"
         android:summary="@string/thirdPartyLibraryContentString" />
 
     <Preference
+        android:key="issueTrackerPreferenceItem"
         android:title="@string/issueTrackingTitleString"
         android:summary="@string/issueTrackingContentString" />
 
