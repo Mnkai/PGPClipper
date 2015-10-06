@@ -41,17 +41,25 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
-    <EditText
+    <ScrollView
+        android:id="@+id/decryptionResultTextScrollWrapper"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/deecryptionResultText"
         android:layout_below="@+id/decryptionStatusTitle"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:cursorVisible="false"
-        android:onClick="onClick"
         android:layout_alignRight="@+id/decryptionStatusTitle"
-        android:layout_alignEnd="@+id/decryptionStatusTitle" />
+        android:layout_alignEnd="@+id/decryptionStatusTitle" >
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/decryptionResultText"
+
+            android:cursorVisible="false"
+            android:onClick="onClick"
+            />
+    </ScrollView>
+
 
     <TextView
         android:layout_width="wrap_content"
@@ -59,6 +67,6 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="@string/fastReplyText"
         android:id="@+id/fastReplyIndicator"
-        android:layout_below="@+id/deecryptionResultText"
+        android:layout_below="@+id/decryptionResultTextScrollWrapper"
         android:layout_centerHorizontal="true" />
 </RelativeLayout>

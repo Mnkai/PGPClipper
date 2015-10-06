@@ -68,7 +68,7 @@ public class PGPClipperResultShowActivity extends Activity {
 
         sigStatus = (TextView) findViewById(R.id.sigStatusTitle);
         decStatus = (TextView) findViewById(R.id.decryptionStatusTitle);
-        decResult = (EditText) findViewById(R.id.deecryptionResultText);
+        decResult = (EditText) findViewById(R.id.decryptionResultText);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
