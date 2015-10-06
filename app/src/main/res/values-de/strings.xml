@@ -1,0 +1,21 @@
+<resources>
+    <string name="enabledService">Dienst aktivieren</string>
+    <string name="enabledServiceSummary">Haken setzen, um PGPClipper zu erlauben, im Hintergrund weiter zu laufen.\nBeachten Sie: Diese App *wird* auf Ihre Zwischenablage zugreifen!</string>
+    <string name="pgpServiceProviderAppTitleString">OpenPGP Service Provider Status</string>
+    <string name="appVersionTitleString">Version</string>
+    <string name="licenseTitleString">Lizenz</string>
+    <string name="thirdPartyLicenseTitleString">Dritte Lizenzen</string>
+    <string name="issueTrackingTitleString">Issue-Tracking und Quellcode</string>
+    <string name="signatureToggleText">Signieren</string>
+    <string name="replyText">Antworten</string>
+    <string name="processingResultText">Verarbeite Zwischenablage</string>
+    <string name="signatureStatusText">Signaturstatus:</string>
+    <string name="decryptionStatusText">Entschlüssellungsstatus:</string>
+    <string name="fastReplyText">Für schnelle Antwort Resultatfeld berühren</string>
+    <string name="NotificationTickerText">Mögliche PGP Daten erkannt</string>
+    <string name="NotificationTitleText">Mögliche PGP Daten erkannt</string>
+    <string name="NotificationContentText">Versuchen, die Zwischenablage zu verarbeiten?</string>
+    <string name="darkText">Dunkel</string>
+    <string name="lightText">Hell</string>
+    <string name="themeStyleText">Design-Einstellungen</string>
+</resources>
