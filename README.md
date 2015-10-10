@@ -15,3 +15,6 @@ Apache License 2.0, see LICENSE for more details and full license.
 
 # Contributers
 Look at contributers tab in repository information.
+
+# I guess you are lazy.
+Yes, I am. Check out release pane or Google Play Store link for more information.
