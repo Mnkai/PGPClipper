@@ -16,7 +16,7 @@ public class BootListener extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         // BOOT_COMPLETED” start Service
-        if (intent.getAction().equals(ANDROID_ON)) {
+        if (ANDROID_ON.equals(intent.getAction())) {
 
             // get preference
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);

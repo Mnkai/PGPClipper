@@ -65,18 +65,32 @@ public class PGPClipperQuickReplyActivity extends Activity {
         sigCheckBox = (CheckBox) findViewById(R.id.signatureCheck);
         replyTextField = (EditText) findViewById(R.id.replyText);
 
+        //setting hint if sender's signature key found
+        String[] keyIDs = intent.getStringArrayExtra("KEY_ID");
+        if(keyIDs != null) {
+            String strConcatId = "";
+            for (String id : keyIDs) {
+                strConcatId += id;
+                strConcatId += ", ";
+            }
+            if(strConcatId.endsWith(", ")){
+                strConcatId = strConcatId.substring(0, strConcatId.lastIndexOf(", "));
+            }
+            replyTextField.setHint(getString(R.string.hintRecipient) + strConcatId);
+        }
+
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         String currentPgpProvider = preferences.getString("pgpServiceProviderApp", null);
 
-        if ( currentPgpProvider == null )
+        if ( currentPgpProvider == null || "".equals(currentPgpProvider))
         {
             // Default security provider is not set
             Log.e("PGPClipperService", "Security provider is not set!");
         }
         else
         {
-            Log.d("PGPClipperService", "Current security provider: " + currentPgpProvider );
+            Log.d("PGPClipperService", "Current security provider: " + currentPgpProvider);
 
             serviceConnection = new OpenPgpServiceConnection(this, currentPgpProvider);
             serviceConnection.bindToService();
@@ -132,8 +146,12 @@ public class PGPClipperQuickReplyActivity extends Activity {
                 {
                     String[] keyIDs = intent.getStringArrayExtra("KEY_ID");
                     if ( keyIDs != null )
+                    {
                         data.putExtra(OpenPgpApi.EXTRA_USER_IDS, keyIDs);
+                    }
+
                     data.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true);
+
                     if ( sigCheckBox.isChecked() )
                     {
                         // signature + encryption
@@ -182,7 +200,12 @@ public class PGPClipperQuickReplyActivity extends Activity {
         // try encryption (optionally signature) and copy data into clipboard
 
         Intent data = new Intent();
-        data.putExtra(OpenPgpApi.EXTRA_USER_IDS, intent.getStringArrayExtra("KEY_ID"));
+        String[] keyIDs = intent.getStringArrayExtra("KEY_ID");
+        if( keyIDs != null)
+        {
+            data.putExtra(OpenPgpApi.EXTRA_USER_IDS, intent.getStringArrayExtra("KEY_ID"));
+        }
+
         data.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true);
         if ( sigCheckBox.isChecked() )
         {
@@ -283,7 +306,7 @@ public class PGPClipperQuickReplyActivity extends Activity {
                 {
                     //TODO: Show user error dialog
 
-                    replyTextField.setText("Error, cannot continue. Send bug report to author.");
+                    replyTextField.setText(R.string.errorCannotContinue);
 
                     break;
                 }

@@ -17,10 +17,14 @@
     <string name="signatureStatusText">Signature Status:</string>
     <string name="decryptionStatusText">Decryption Status:</string>
     <string name="fastReplyText">Press result field for fast reply</string>
+    <string name="tryAgainText">To try again, Press result field.</string>
     <string name="NotificationTickerText">Possible PGP Data Detected</string>
     <string name="NotificationTitleText">Possible PGP Data Detected</string>
     <string name="NotificationContentText">Attempt to process it?</string>
     <string name="darkText">Dark</string>
     <string name="lightText">Light</string>
     <string name="themeStyleText">Theme Setting</string>
+    <string name="errorCannotProcess">cannot process</string>
+    <string name="errorCannotContinue">Error, cannot continue. Send bug report to author.</string>
+    <string name="hintRecipient">To:</string>
 </resources>

@@ -23,7 +23,6 @@ public class PGPClipperService extends Service {
     ClipboardManager clipboardManager;
     ClipboardManager.OnPrimaryClipChangedListener onPrimaryClipChangedListener;
 
-
     public static final String TRY_DECRYPT = "TRY_DECRYPT";
     public static final String DATA = "DATA";
 
@@ -65,7 +64,6 @@ public class PGPClipperService extends Service {
 
                     currentData = clipboardManager.getPrimaryClip().getItemAt(0).getText().toString();
 
-
                     // check if this contains ASCII armored PGP data
 
                     if (PGPBlockDetector.isBlockPresent(currentData))
@@ -81,13 +79,14 @@ public class PGPClipperService extends Service {
                         PendingIntent pendingIntent = PendingIntent.getService(getApplicationContext(), 0, intentToLaunchWhenNotificationClicked, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);
 
                         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(getApplicationContext())
-                                .setSmallIcon(R.mipmap.icon)
+                                .setSmallIcon(R.drawable.ic_noti)
                                 .setTicker(getString(R.string.NotificationTickerText))
                                 .setContentTitle(getString(R.string.NotificationTitleText))
                                 .setContentText(getString(R.string.NotificationContentText))
                                 .setDefaults(Notification.DEFAULT_LIGHTS)
                                 .setContentIntent(pendingIntent)
                                 .setPriority(NotificationCompat.PRIORITY_MAX)
+                                .setWhen(System.currentTimeMillis())
                                 .setAutoCancel(true);
 
                         notificationManager.notify(8591274, notificationBuilder.build());
@@ -96,6 +95,7 @@ public class PGPClipperService extends Service {
                 }
             });
         }
+
     }
 
 
