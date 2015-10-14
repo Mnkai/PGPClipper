@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -28,6 +29,7 @@ public class PGPClipperSettingsActivity extends AppCompatActivity {
     }
 
     public static class SettingFragment extends PreferenceFragment {
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -85,6 +87,7 @@ public class PGPClipperSettingsActivity extends AppCompatActivity {
             });
 
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+
             final ListPreference themePref = (ListPreference) findPreference("themeSelection");
 
             themePref.setEntryValues(R.array.themes_values);
@@ -105,8 +108,7 @@ public class PGPClipperSettingsActivity extends AppCompatActivity {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
 
-                    switch ((String) newValue)
-                    {
+                    switch ((String) newValue) {
                         case "dark":
                             themePref.setSummary(getResources().getString(R.string.darkText));
                             break;
@@ -119,8 +121,33 @@ public class PGPClipperSettingsActivity extends AppCompatActivity {
                 }
             });
 
+            final CheckBoxPreference enabledPref = (CheckBoxPreference)findPreference("enabledCheckBox");
 
+            findPreference("pgpServiceProviderApp").setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    String providerApp = (String) newValue;
+                    if (providerApp == null || "".equals(providerApp)) {
+                        enabledPref.setEnabled(false);
+                        enabledPref.setChecked(false);
+                        getActivity().stopService(new Intent(getActivity(), PGPClipperService.class));
+                    } else {
+                        enabledPref.setEnabled(true);
+                    }
+                    return true;
+                }
+            });
+            String providerApp = sharedPreferences.getString("pgpServiceProviderApp",null);
+            if(providerApp == null || "".equals(providerApp)){
+                enabledPref.setEnabled(false);
+                enabledPref.setChecked(false);
+                getActivity().stopService(new Intent(getActivity(), PGPClipperService.class));
+            }else {
+                if (enabledPref.isChecked()) {
+                    getActivity().startService(new Intent(getActivity(), PGPClipperService.class));
+                }
+                enabledPref.setEnabled(true);
+            }
         }
     }
-
 }

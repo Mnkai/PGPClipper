@@ -43,7 +43,9 @@ public class PGPClipperResultShowActivity extends Activity {
     TextView sigStatus;
     TextView decStatus;
     EditText decResult;
+    TextView fastReplyIndc;
 
+    boolean isReplyable = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,12 +71,13 @@ public class PGPClipperResultShowActivity extends Activity {
         sigStatus = (TextView) findViewById(R.id.sigStatusTitle);
         decStatus = (TextView) findViewById(R.id.decryptionStatusTitle);
         decResult = (EditText) findViewById(R.id.decryptionResultText);
+        fastReplyIndc = (TextView) findViewById(R.id.fastReplyIndicator);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         String currentPgpProvider = preferences.getString("pgpServiceProviderApp", null);
 
-        if ( currentPgpProvider == null )
+        if ( currentPgpProvider == null || "".equals(currentPgpProvider))
         {
             // Default security provider is not set
             Log.e("PGPClipperService", "Security provider is not set!");
@@ -87,28 +90,25 @@ public class PGPClipperResultShowActivity extends Activity {
             serviceConnection.bindToService();
 
             tryDecryption();
-
         }
     }
 
     private void tryDecryption ()
     {
-        if ( serviceConnection.isBound() )
-        {
-            if ( intent != null )
-            {
-                attemptPgpApiAccess(intent.getStringExtra(DATA));
-            }
-        }
-        else
-        {
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    tryDecryption();
+        if(serviceConnection != null) {
+            if (serviceConnection.isBound()) {
+                if (intent != null) {
+                    attemptPgpApiAccess(intent.getStringExtra(DATA));
                 }
-            }, 500);
+            } else {
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        tryDecryption();
+                    }
+                }, 500);
+            }
         }
     }
 
@@ -168,17 +168,24 @@ public class PGPClipperResultShowActivity extends Activity {
         api.executeApiAsync(data, is, os, new CallBack(os, REQUEST_CODE_DECRYPT_AND_VERIFY));
     }
 
-    public void onClick (View v)
-    {
-        // start quick reply activity
-        Intent intent = new Intent(this, PGPClipperQuickReplyActivity.class);
-        if (KEY_ID != null)
-            intent.putExtra("KEY_ID", convertToStringArray(KEY_ID));
+    public void onClick (View v) {
+        if (isReplyable)
+        {
+            // start quick reply activity
+            Intent intent = new Intent(this, PGPClipperQuickReplyActivity.class);
+            if (KEY_ID != null) {
+                intent.putExtra("KEY_ID", convertToStringArray(KEY_ID));
+            }
 
-
-        startActivity(intent);
-        overridePendingTransition(0, 0);
-        finish();
+            startActivity(intent);
+            overridePendingTransition(0, 0);
+            finish();
+        }
+        else
+        {
+            //try again
+            tryDecryption();
+        }
     }
 
 
@@ -224,27 +231,30 @@ public class PGPClipperResultShowActivity extends Activity {
 
                         if ( signatureResult.getResult() == 1 )
                         {
-                            sigStatus.setText(sigStatus.getText() + "O \n(" + signatureResult.getPrimaryUserId() + ")");
+                            sigStatus.setText(getString(R.string.signatureStatusText) + "O \n(" + signatureResult.getPrimaryUserId() + ")");
                             KEY_ID = signatureResult.getUserIds();
                         }
                         else
                         {
-                            sigStatus.setText(sigStatus.getText() + "X");
+                            sigStatus.setText(getString(R.string.signatureStatusText) + "X");
                         }
 
 
                         if ( decryptionResult.getResult() == 1)
                         {
-                            decStatus.setText(decStatus.getText() + "O");
+                            decStatus.setText(getString(R.string.decryptionStatusText) + "O");
                         }
                         else
-                            decStatus.setText(decStatus.getText() + "X");
+                        {
+                            decStatus.setText(getString(R.string.decryptionStatusText) + "X");
+                        }
 
-                        if ( finalResult != null )
+                        if ( finalResult != null ) {
                             decResult.setText(finalResult);
-                        else
-                            decResult.setText("Cannot process");
-
+                            fastReplyIndc.setText(R.string.fastReplyText);
+                            isReplyable = true;
+                        }else
+                            decResult.setText(R.string.errorCannotProcess);
                     }
                     catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
@@ -270,9 +280,9 @@ public class PGPClipperResultShowActivity extends Activity {
                 {
                     //TODO: Show user error dialog
 
-                    sigStatus.setText(sigStatus.getText() + "X");
-                    decStatus.setText(decStatus.getText() + "X");
-                    decResult.setText("Cannot process");
+                    sigStatus.setText(getString(R.string.signatureStatusText) + "X");
+                    decStatus.setText(getString(R.string.decryptionStatusText) + "X");
+                    decResult.setText(R.string.errorCannotProcess);
 
                     break;
                 }
