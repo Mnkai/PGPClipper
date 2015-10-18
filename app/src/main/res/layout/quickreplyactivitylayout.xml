@@ -32,7 +32,15 @@
         android:layout_height="wrap_content"
         android:text="@string/replyText"
         android:id="@+id/executeBtn"
-        android:layout_below="@+id/replyText"
         android:onClick="onClick"
+        android:layout_below="@+id/nfcNotificationText"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tap NFC token now to sign and encrypt this message"
+        android:id="@+id/nfcNotificationText"
+        android:layout_below="@+id/replyText"
         android:layout_centerHorizontal="true" />
 </RelativeLayout>
