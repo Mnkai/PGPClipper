@@ -62,7 +62,13 @@ public class PGPClipperService extends Service {
                     // get current clipboard data to string
                     String currentData;
 
-                    currentData = clipboardManager.getPrimaryClip().getItemAt(0).getText().toString();
+                    try {
+                        currentData = clipboardManager.getPrimaryClip().getItemAt(0).getText().toString();
+                    }
+                    catch (Exception e)
+                    {
+                        return;
+                    }
 
                     // check if this contains ASCII armored PGP data
 
