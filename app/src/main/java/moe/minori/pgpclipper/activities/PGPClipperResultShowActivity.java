@@ -66,6 +66,8 @@ public class PGPClipperResultShowActivity extends Activity {
 
     boolean waitingNFC = false;
 
+    boolean complete = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -138,6 +140,7 @@ public class PGPClipperResultShowActivity extends Activity {
     }
 
     private void tryNfcDecryption(String nfcUUID) {
+
         try {
             // get device salt
             byte[] salt = EncryptionUtils.hexToByteArray(preferences.getString("deviceSalt", null));
@@ -242,7 +245,8 @@ public class PGPClipperResultShowActivity extends Activity {
 
         Intent data = new Intent();
         data.setAction(OpenPgpApi.ACTION_DECRYPT_VERIFY);
-        data.putExtra(OpenPgpApi.EXTRA_PASSPHRASE, pgpKeyPassword.toCharArray());
+        if ( pgpKeyPassword != null )
+            data.putExtra(OpenPgpApi.EXTRA_PASSPHRASE, pgpKeyPassword.toCharArray());
 
         InputStream is;
         ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -259,10 +263,9 @@ public class PGPClipperResultShowActivity extends Activity {
     }
 
     public void onClick(View v) {
-        if (waitingNFC) {
+        if (!complete) {
             disableTagReading(adapter);
 
-            waitingNFC = false;
             tryDecryption();
         } else if (isReplyable) {
             // start quick reply activity
@@ -339,12 +342,15 @@ public class PGPClipperResultShowActivity extends Activity {
                             e.printStackTrace();
                         }
 
+                        waitingNFC = false;
+                        complete = true;
+
                     }
                 }
                 case OpenPgpApi.RESULT_CODE_USER_INTERACTION_REQUIRED: {
                     PendingIntent pi = result.getParcelableExtra(OpenPgpApi.RESULT_INTENT);
 
-                    if ( !waitingNFC )
+                    if ( !complete && waitingNFC )
                     {
                         try {
                             PGPClipperResultShowActivity.this.startIntentSenderFromChild(PGPClipperResultShowActivity.this, pi.getIntentSender(), 5298, null, 0, 0, 0);

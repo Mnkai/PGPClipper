@@ -33,11 +33,9 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
-import moe.minori.pgpclipper.Dialogs;
 import moe.minori.pgpclipper.R;
 import moe.minori.pgpclipper.encryption.AESHelper;
 import moe.minori.pgpclipper.encryption.PBKDF2Helper;
-import moe.minori.pgpclipper.listeners.PINInputReceivedListener;
 import moe.minori.pgpclipper.util.EncryptionUtils;
 
 /**
@@ -95,7 +93,7 @@ public class PGPClipperQuickReplyActivity extends Activity {
 
         if (preferences.getBoolean("enableNFCAuth", false) && adapter.isEnabled()) {
             nfcSignatureNotice.setVisibility(View.VISIBLE);
-            enableTagReading(adapter);
+
         } else {
             nfcSignatureNotice.setVisibility(View.INVISIBLE);
         }
@@ -313,7 +311,7 @@ public class PGPClipperQuickReplyActivity extends Activity {
             aesPassword = PBKDF2Helper.createSaltedHash(nfcUUID, salt);
 
             // aes password generated, try decryption
-            byte[] encryptedData = EncryptionUtils.stringToByteArray(preferences.getString("encryptedKeyPass", null));
+            byte[] encryptedData = EncryptionUtils.hexToByteArray(preferences.getString("encryptedKeyPass", null));
             if (encryptedData == null)
                 throw new Exception("System does not have encrypted password, but wizard has somehow finished");
 
@@ -322,6 +320,8 @@ public class PGPClipperQuickReplyActivity extends Activity {
             decryptedData = AESHelper.decrypt(encryptedData, aesPassword);
 
             pgpKeyPassword = EncryptionUtils.byteArrayToString(decryptedData);
+
+            tryEncryption();
 
         } catch (NoSuchAlgorithmException | InvalidKeySpecException | IllegalBlockSizeException | NoSuchPaddingException | BadPaddingException e) {
             e.printStackTrace();
