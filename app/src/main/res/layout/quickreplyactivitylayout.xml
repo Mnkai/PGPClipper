@@ -39,7 +39,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Tap NFC token now to sign and encrypt this message"
+        android:text="@string/quickReplyNFCNotificationText"
         android:id="@+id/nfcNotificationText"
         android:layout_below="@+id/replyText"
         android:layout_centerHorizontal="true"
