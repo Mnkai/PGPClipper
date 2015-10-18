@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import org.openintents.openpgp.util.OpenPgpApi;
 import org.openintents.openpgp.util.OpenPgpServiceConnection;
@@ -42,6 +43,8 @@ public class PGPClipperQuickReplyActivity extends Activity {
     CheckBox sigCheckBox;
     EditText replyTextField;
 
+    TextView nfcSignatureNotice;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -64,6 +67,18 @@ public class PGPClipperQuickReplyActivity extends Activity {
 
         sigCheckBox = (CheckBox) findViewById(R.id.signatureCheck);
         replyTextField = (EditText) findViewById(R.id.replyText);
+        nfcSignatureNotice = (TextView) findViewById(R.id.nfcNotificationText);
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+        if ( preferences.getBoolean("enableNFCAuth", false) )
+        {
+            nfcSignatureNotice.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            nfcSignatureNotice.setVisibility(View.INVISIBLE);
+        }
 
         //setting hint if sender's signature key found
         String[] keyIDs = intent.getStringArrayExtra("KEY_ID");
@@ -78,8 +93,6 @@ public class PGPClipperQuickReplyActivity extends Activity {
             }
             replyTextField.setHint(getString(R.string.hintRecipient) + strConcatId);
         }
-
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         String currentPgpProvider = preferences.getString("pgpServiceProviderApp", null);
 
