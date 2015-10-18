@@ -6,12 +6,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -78,6 +81,11 @@ public class NFCAuthenticationSetupActivity extends Activity {
         // just to be sure, initialize settings
 
         initSetting(editor);
+
+        // make screen on always on this activity
+
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
 
 
     }
@@ -413,15 +421,29 @@ public class NFCAuthenticationSetupActivity extends Activity {
             nextBtn.setEnabled(false);
             // do the work
 
-            if (finalStage(nfcTagUUID, salt, password, pinUse, PIN)) {
-                this.setResult(RESULT_OK);
-                Toast.makeText(this, "NFC auth enabled", Toast.LENGTH_LONG).show();
-                finish();
-            } else {
-                this.setResult(RESULT_CANCELED);
-                Toast.makeText(this, "NFC auth failed to enable", Toast.LENGTH_LONG).show();
-                finish();
-            }
+            AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>() {
+
+                @Override
+                protected Boolean doInBackground(Void... params) {
+                    return finalStage(nfcTagUUID, salt, password, pinUse, PIN);
+                }
+
+                @Override
+                protected void onPostExecute(Boolean aBoolean) {
+                    if ( aBoolean )
+                    {
+                        setResult(RESULT_OK);
+                        Toast.makeText(NFCAuthenticationSetupActivity.this, "NFC auth enabled", Toast.LENGTH_LONG).show();
+                        finish();
+                    }
+                    else
+                    {
+                        setResult(RESULT_CANCELED);
+                        Toast.makeText(NFCAuthenticationSetupActivity.this, "NFC auth failed to enable", Toast.LENGTH_LONG).show();
+                        finish();
+                    }
+                }
+            }.execute();
 
         }
     }
