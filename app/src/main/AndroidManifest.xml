@@ -40,6 +40,8 @@
             android:icon="@mipmap/icon"
             android:excludeFromRecents="true" />
 
+        <activity android:name=".activities.NFCAuthenticationSetupActivity" />
+
     </application>
 
 </manifest>
