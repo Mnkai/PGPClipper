@@ -86,7 +86,8 @@ public class PGPClipperSettingsActivity extends AppCompatActivity {
                 }
             });
 
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+            final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+            final SharedPreferences.Editor editor = sharedPreferences.edit();
 
             final ListPreference themePref = (ListPreference) findPreference("themeSelection");
 
@@ -147,6 +148,45 @@ public class PGPClipperSettingsActivity extends AppCompatActivity {
                     getActivity().startService(new Intent(getActivity(), PGPClipperService.class));
                 }
                 enabledPref.setEnabled(true);
+            }
+
+            // for NFC authentication
+
+            findPreference("enableNFCAuth").setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    if ( (boolean) newValue == false )
+                    {
+                        // delete current hash and encrypted data
+
+                        editor.remove("deviceSalt");
+                        editor.remove("encryptedKeyPass");
+
+                        editor.commit();
+                    }
+                    else
+                    {
+                        // start NFCAuthSetupActivity
+                        Intent intent = new Intent(getActivity(), NFCAuthenticationSetupActivity.class);
+
+                        startActivityForResult(intent, 7272);
+                    }
+                    return true;
+                }
+            });
+        }
+
+        @Override
+        public void onActivityResult(int requestCode, int resultCode, Intent data) {
+            super.onActivityResult(requestCode, resultCode, data);
+
+            if ( requestCode == 7272 ) // NFCAuthSetupResult
+            {
+                if ( resultCode != 0 ) // error or user canceled auth operation
+                {
+                    CheckBoxPreference checkBoxPreference = (CheckBoxPreference) findPreference("enableNFCAuth");
+                    checkBoxPreference.setChecked(false);
+                }
             }
         }
     }
