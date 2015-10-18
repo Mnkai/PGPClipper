@@ -169,13 +169,13 @@ public class PGPClipperResultShowActivity extends Activity {
 
             tryDecryption();
 
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException | IllegalBlockSizeException | NoSuchPaddingException | BadPaddingException e) {
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException | IllegalBlockSizeException | NoSuchPaddingException e) {
             e.printStackTrace();
-        } catch (InvalidKeyException e) {
+        } catch (InvalidKeyException | BadPaddingException e2) {
             // NFC token or PIN was wrong.
             fastReplyIndc.setText(R.string.credentialWrongText);
             pgpKeyPassword = null;
-            enableTagReading(adapter);
+            //enableTagReading(adapter);
 
         } catch (Exception e) {
             e.printStackTrace();
