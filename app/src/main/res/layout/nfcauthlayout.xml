@@ -17,7 +17,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Close"
+            android:text="@string/closeText"
             android:id="@+id/closeBtn"
             android:onClick="onClick"
             android:layout_gravity="bottom" />
@@ -25,7 +25,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Next"
+            android:text="@string/nextText"
             android:id="@+id/nextBtn"
             android:onClick="onClick" />
     </LinearLayout>

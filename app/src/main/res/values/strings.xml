@@ -43,4 +43,6 @@
     <string name="nfcWizard08Text">NFC token successfully detected.</string>
     <string name="nfcWizard11Text">This NFC token cannot be used.</string>
     <string name="nfcWizard12Text">Generating hash and encrypting...\nThis might take a long time (few minutes)\ndepending on your device\'s power.\n\nScreen will stay on.</string>
+    <string name="closeText">Close</string>
+    <string name="nextText">Next</string>
 </resources>

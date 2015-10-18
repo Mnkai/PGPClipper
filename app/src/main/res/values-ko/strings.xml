@@ -22,4 +22,23 @@
     <string name="enableNFCAuth">NFC 인증 활성화</string>
     <string name="enableNFCAuthSummary">이 옵선을 선택해 PGPClipper가 NFC 토큰을 사용해 사인을 할 수 있도록 합니다.\n이 기능을 활성화하면 이 어플리케이션은 PGP 암호를 **저장 할 것입니다**.</string>
     <string name="tryAgainText">다시 시도하려면 결과 필드를 누르세요</string>
+    <string name="credentialWrongText">보안정보가 맞지 않았습니다. 다시 시도하세요.</string>
+    <string name="errorCannotContinue">경고, 진행할 수 없습니다. 제작자에게 버그리포트를 보내세요.</string>
+    <string name="errorCannotProcess">처리할 수 없음</string>
+    <string name="hintRecipient">수신자:</string>
+    <string name="nfcAuthenticationSetupWizardTitleText">NFC 인증 설정 마법사</string>
+    <string name="nfcReadyResultShowText">NFC 태그를 사용해 인증\n결과 필드를 눌러 비밀번호/저장된 인증정보 사용</string>
+    <string name="nfcWizard01Text">이 마법사는 NFC 태그 인증 설정을 도울 것입니다.\n\n다음을 눌러 계속할 수 있습니다.\n언제든지 닫기를 눌러 마법사를 종료할 수 있습니다.</string>
+    <string name="nfcWizard02Text">암호화를 위한 솔트 생성 중\n잠시 기다려주세요</string>
+    <string name="nfcWizard03Text">PGPClipper가 성공적으로 솔트를 생성했습니다.</string>
+    <string name="nfcWizard04Text">이제 PGP 기본키의 암호를 입력하세요.\n이 정보는 암호화 될 것입니다.</string>
+    <string name="nfcWizard05PasswordInputText">PGP 암호 입력</string>
+    <string name="nfcWizard05PasswordReInputText">PGP 암호 다시 입력</string>
+    <string name="nfcWizard06Text">장치에 NFC 토큰을 대세요.</string>
+    <string name="nfcWizard07Text">장치에 NFC 토큰을 다시 대세요.</string>
+    <string name="nfcWizard08Text">NFC 토큰 감지 성공</string>
+    <string name="nfcWizard11Text">이 NFC 토큰은 사용할 수 없습니다.</string>
+    <string name="nfcWizard12Text">해시를 생성하고 암호화 중...\n이 작업은 장치의 성능에 따라 오래 걸릴 수 있습니다.\n\n작업이 완료될 때 까지 임시로 화면이 꺼지지 않습니다.</string>
+    <string name="closeText">닫기</string>
+    <string name="nextText">다음</string>
 </resources>
