@@ -8,7 +8,6 @@ import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.text.Editable;

@@ -89,7 +89,18 @@ public class PGPClipperResultShowActivity extends Activity {
             serviceConnection = new OpenPgpServiceConnection(this, currentPgpProvider);
             serviceConnection.bindToService();
 
-            tryDecryption();
+            if ( preferences.getBoolean("enableNFCAuth", false))
+            {
+                if ( preferences.getBoolean("isPIN", false) )
+                {
+
+                }
+            }
+            else
+            {
+                tryDecryption();
+            }
+
         }
     }
 

@@ -1,7 +1,6 @@
 package moe.minori.pgpclipper.activities;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -13,10 +12,6 @@ import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.text.Editable;
-import android.text.InputType;
-import android.text.TextWatcher;
-import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
@@ -38,9 +33,11 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
+import moe.minori.pgpclipper.Dialogs;
 import moe.minori.pgpclipper.R;
 import moe.minori.pgpclipper.encryption.AESHelper;
 import moe.minori.pgpclipper.encryption.PBKDF2Helper;
+import moe.minori.pgpclipper.listeners.PINInputReceivedListener;
 import moe.minori.pgpclipper.util.EncryptionUtils;
 
 /**
@@ -300,47 +297,18 @@ public class PGPClipperQuickReplyActivity extends Activity {
             // is PIN enabled?
 
             boolean isPIN = preferences.getBoolean("isPIN", false);
-            final String[] PIN = new String[1];
-            final AlertDialog[] dialog = new AlertDialog[1];
 
             if (isPIN) {
                 // Ask user about PIN
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-                builder.setTitle("NFC PIN");
-                builder.setMessage("Input PIN");
-
-                final EditText input = new EditText(this);
-                input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
-                input.setTransformationMethod(PasswordTransformationMethod.getInstance());
-
-
-                input.addTextChangedListener(new TextWatcher() {
+                Dialogs.showPINDialog(this, new PINInputReceivedListener() {
                     @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        if (s.length() == 4) {
-                            PIN[0] = s.toString();
-                            dialog[0].dismiss();
-
-                            tryNfcSignEncryption(EncryptionUtils.byteArrayToHex(tag.getId()), PIN[0]);
-                        }
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable s) {
-
+                    public void onPINReceived(String PIN) {
+                        tryNfcSignEncryption(EncryptionUtils.byteArrayToHex(tag.getId()), PIN);
                     }
                 });
 
-                builder.setView(input);
 
-                dialog[0] = builder.show();
             } else {
                 tryNfcSignEncryption(EncryptionUtils.byteArrayToHex(tag.getId()));
             }
