@@ -9,6 +9,9 @@ public class EncryptionUtils {
 
     public static String byteArrayToHex (byte[] input)
     {
+        if ( input == null )
+            return null;
+
         StringBuilder builder = new StringBuilder();
 
         for ( byte one : input )
@@ -21,6 +24,9 @@ public class EncryptionUtils {
 
     public static byte[] hexToByteArray (String input)
     {
+        if ( input == null )
+            return null;
+
         byte [] binary = new byte[input.length() / 2];
 
         for(int i = 0; i < binary.length; i++)
