@@ -30,9 +30,9 @@
     <string name="enableNFCAuth">Enable NFC Authentication</string>
     <string name="enableNFCAuthSummary">Check this box to allow PGPClipper perform signature with NFC token.\nNote that this application *will* store your PGP password if you enable this function.</string>
     <string name="credentialWrongText">Credential was wrong, try again</string>
-    <string name="nfcReadyResultShowText">Tap NFC tag to authenticate\nPress result field for password/stored credential failback</string>
+    <string name="nfcReadyResultShowText">Tap NFC token to authenticate\nPress result field for password/stored credential failback</string>
     <string name="nfcAuthenticationSetupWizardTitleText">NFC Authentication Setup Wizard</string>
-    <string name="nfcWizard01Text">This Wizard will help you setup NFC tag authentication.\n\nPress next to continue.\nPress close to close this wizard at anytime.</string>
+    <string name="nfcWizard01Text">This Wizard will help you setup NFC token authentication.\n\nPress next to continue.\nPress close to close this wizard at anytime.</string>
     <string name="nfcWizard02Text">Generating salt value for encryption.\nPlease wait.</string>
     <string name="nfcWizard03Text">PGPClipper has successfully generated salt.</string>
     <string name="nfcWizard04Text">Now you will provide your default key\'s password.\nThis information will be encrypted.</string>
