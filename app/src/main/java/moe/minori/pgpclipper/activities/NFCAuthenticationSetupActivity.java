@@ -357,11 +357,11 @@ public class NFCAuthenticationSetupActivity extends Activity {
                 protected void onPostExecute(Boolean aBoolean) {
                     if (aBoolean) {
                         setResult(RESULT_OK);
-                        Toast.makeText(NFCAuthenticationSetupActivity.this, "NFC auth enabled", Toast.LENGTH_LONG).show();
+                        //Toast.makeText(NFCAuthenticationSetupActivity.this, "NFC auth enabled", Toast.LENGTH_LONG).show();
                         finish();
                     } else {
                         setResult(RESULT_CANCELED);
-                        Toast.makeText(NFCAuthenticationSetupActivity.this, "NFC auth failed to enable", Toast.LENGTH_LONG).show();
+                        //Toast.makeText(NFCAuthenticationSetupActivity.this, "NFC auth failed to enable", Toast.LENGTH_LONG).show();
                         finish();
                     }
                 }
