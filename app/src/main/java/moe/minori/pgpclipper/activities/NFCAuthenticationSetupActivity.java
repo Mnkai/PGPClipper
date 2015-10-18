@@ -392,6 +392,8 @@ public class NFCAuthenticationSetupActivity extends Activity {
             return false;
         }
 
+        editor.commit();
+
         return true;
     }
 }

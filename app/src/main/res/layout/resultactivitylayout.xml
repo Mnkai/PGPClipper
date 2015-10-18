@@ -68,5 +68,6 @@
         android:text="@string/fastReplyText"
         android:id="@+id/fastReplyIndicator"
         android:layout_below="@+id/decryptionResultTextScrollWrapper"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:gravity="center" />
 </RelativeLayout>

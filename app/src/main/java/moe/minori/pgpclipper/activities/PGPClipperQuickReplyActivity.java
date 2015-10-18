@@ -242,14 +242,11 @@ public class PGPClipperQuickReplyActivity extends Activity {
 
         data.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true);
 
-        if ( pgpKeyPassword != null )
-        {
+        if (pgpKeyPassword != null) {
             // always sign
             data.setAction(OpenPgpApi.ACTION_SIGN_AND_ENCRYPT);
-            data.putExtra("EXTRA_PASSPHRASE", pgpKeyPassword.toCharArray());
-        }
-        else
-        {
+            data.putExtra(OpenPgpApi.EXTRA_PASSPHRASE, pgpKeyPassword.toCharArray());
+        } else {
             if (sigCheckBox.isChecked()) {
                 // signature + encryption
 
@@ -275,7 +272,7 @@ public class PGPClipperQuickReplyActivity extends Activity {
 
         OpenPgpApi api = new OpenPgpApi(this, serviceConnection.getService());
 
-        if (sigCheckBox.isChecked() || pgpKeyPassword != null ) {
+        if (sigCheckBox.isChecked() || pgpKeyPassword != null) {
             api.executeApiAsync(data, is, os, new CallBack(os, REQUEST_CODE_SIGN_AND_ENCRYPT));
         } else {
             api.executeApiAsync(data, is, os, new CallBack(os, REQUEST_CODE_ENCRYPT));
@@ -294,29 +291,14 @@ public class PGPClipperQuickReplyActivity extends Activity {
         if (intent.getAction().equals(NfcAdapter.ACTION_TAG_DISCOVERED)) {
             final Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
 
-            // is PIN enabled?
 
-            boolean isPIN = preferences.getBoolean("isPIN", false);
+            tryNfcSignEncryption(EncryptionUtils.byteArrayToHex(tag.getId()));
 
-            if (isPIN) {
-                // Ask user about PIN
-
-                Dialogs.showPINDialog(this, new PINInputReceivedListener() {
-                    @Override
-                    public void onPINReceived(String PIN) {
-                        tryNfcSignEncryption(EncryptionUtils.byteArrayToHex(tag.getId()), PIN);
-                    }
-                });
-
-
-            } else {
-                tryNfcSignEncryption(EncryptionUtils.byteArrayToHex(tag.getId()));
-            }
 
         }
     }
 
-    private void tryNfcSignEncryption(String nfcUUID, String PIN) {
+    private void tryNfcSignEncryption(String nfcUUID) {
         try {
             // get device salt
             byte[] salt = EncryptionUtils.hexToByteArray(preferences.getString("deviceSalt", null));
@@ -328,17 +310,14 @@ public class PGPClipperQuickReplyActivity extends Activity {
             // first generate aes password.
             byte[] aesPassword;
 
-            if (PIN != null)
-                aesPassword = PBKDF2Helper.createSaltedHash(nfcUUID + PIN, salt);
-            else
-                aesPassword = PBKDF2Helper.createSaltedHash(nfcUUID, salt);
+            aesPassword = PBKDF2Helper.createSaltedHash(nfcUUID, salt);
 
             // aes password generated, try decryption
-            byte [] encryptedData = EncryptionUtils.stringToByteArray(preferences.getString("encryptedKeyPass", null));
-            if ( encryptedData == null )
+            byte[] encryptedData = EncryptionUtils.stringToByteArray(preferences.getString("encryptedKeyPass", null));
+            if (encryptedData == null)
                 throw new Exception("System does not have encrypted password, but wizard has somehow finished");
 
-            byte [] decryptedData;
+            byte[] decryptedData;
 
             decryptedData = AESHelper.decrypt(encryptedData, aesPassword);
 
@@ -356,10 +335,6 @@ public class PGPClipperQuickReplyActivity extends Activity {
             e.printStackTrace();
         }
 
-    }
-
-    private void tryNfcSignEncryption(String nfcUUID) {
-        tryNfcSignEncryption(nfcUUID, null);
     }
 
     private class CallBack implements OpenPgpApi.IOpenPgpCallback {
