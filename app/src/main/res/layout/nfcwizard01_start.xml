@@ -18,8 +18,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="This Wizard will help you setup NFC tag authentication.\n\nPress next to continue.\nPress close to close this wizard at anytime."
         android:id="@+id/textView2"
+        android:gravity="center"
         android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:gravity="center" />
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>

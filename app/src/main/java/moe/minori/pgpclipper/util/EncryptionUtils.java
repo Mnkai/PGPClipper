@@ -1,7 +1,5 @@
 package moe.minori.pgpclipper.util;
 
-import android.support.annotation.Nullable;
-
 /**
  * Created by Minori on 2015-10-18.
  */

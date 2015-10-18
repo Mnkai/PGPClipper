@@ -10,22 +10,24 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import moe.minori.pgpclipper.PGPClipperService;
 import moe.minori.pgpclipper.R;
 
 public class PGPClipperSettingsActivity extends AppCompatActivity {
 
+    SettingFragment fragment;
+
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        getFragmentManager().beginTransaction().replace(android.R.id.content, new SettingFragment()).commit();
+        getFragmentManager().beginTransaction().replace(android.R.id.content, fragment = new SettingFragment()).commit();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        finish();
     }
 
     public static class SettingFragment extends PreferenceFragment {
@@ -166,7 +168,7 @@ public class PGPClipperSettingsActivity extends AppCompatActivity {
                         // start NFCAuthSetupActivity
                         Intent intent = new Intent(getActivity(), NFCAuthenticationSetupActivity.class);
 
-                        startActivityForResult(intent, 7272);
+                        startActivityForResult(intent, 7272 );
                     }
                     return true;
                 }
@@ -175,16 +177,21 @@ public class PGPClipperSettingsActivity extends AppCompatActivity {
 
         @Override
         public void onActivityResult(int requestCode, int resultCode, Intent data) {
-            super.onActivityResult(requestCode, resultCode, data);
+            Log.d("SettingsActivity", "onActivityResult called");
 
             if ( requestCode == 7272 ) // NFCAuthSetupResult
             {
-                if ( resultCode != 0 ) // error or user canceled auth operation
+                if ( resultCode != RESULT_OK ) // error or user canceled auth operation
                 {
                     CheckBoxPreference checkBoxPreference = (CheckBoxPreference) findPreference("enableNFCAuth");
                     checkBoxPreference.setChecked(false);
                 }
             }
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        fragment.onActivityResult(requestCode, resultCode, data);
     }
 }

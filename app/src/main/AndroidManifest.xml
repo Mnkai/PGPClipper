@@ -41,7 +41,9 @@
             android:icon="@mipmap/icon"
             android:excludeFromRecents="true" />
 
-        <activity android:name=".activities.NFCAuthenticationSetupActivity" />
+        <activity android:name=".activities.NFCAuthenticationSetupActivity"
+            android:theme="@style/AppTheme"
+            android:icon="@mipmap/icon"/>
 
     </application>
 

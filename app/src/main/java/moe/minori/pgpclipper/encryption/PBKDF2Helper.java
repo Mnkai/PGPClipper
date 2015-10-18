@@ -2,6 +2,8 @@ package moe.minori.pgpclipper.encryption;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.SecretKeySpec;
+
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
@@ -12,7 +14,7 @@ import java.security.spec.InvalidKeySpecException;
 public class PBKDF2Helper {
     // Algorithm Strength Factors
 
-    public static final String PBKDF2_ALGORITHM = "PBKDF2WithHmacSHA512";
+    public static final String PBKDF2_ALGORITHM = "PBKDF2WithHmacSHA1";
 
     public static final int SALT_LENGTH = 256;
     public static final int HASH_LENGTH = 256;

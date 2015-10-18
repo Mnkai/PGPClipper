@@ -9,7 +9,10 @@ import android.nfc.Tag;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -49,15 +52,18 @@ public class NFCAuthenticationSetupActivity extends Activity {
 
     NfcAdapter nfcAdapter;
 
+    RelativeLayout parent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.nfcauthlayout);
 
+        parent = (RelativeLayout) findViewById(R.id.parent);
         screen = (RelativeLayout) findViewById(R.id.setupScreen);
 
-        layoutInflater(stage, screen);
+        layoutInflater(stage);
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         editor = sharedPreferences.edit();
@@ -100,26 +106,23 @@ public class NFCAuthenticationSetupActivity extends Activity {
                     break;
 
                 case 10:
-                    // store PIN and proceed to next stage
+                    // store PIN and proceed to final stage
 
                     EditText pinInput = (EditText) findViewById(R.id.pinInput);
 
                     PIN = pinInput.getText().toString();
 
-                    goNextStage();
+                    gotoStage(12);
                     break;
                 case 9:
                     // check PIN enabled, if enabled - proceed to stage 10 / if disabled - proceed to end
                     CheckBox pinEnableCheckbox = (CheckBox) findViewById(R.id.isPinEnabled);
 
-                    if ( pinEnableCheckbox.isChecked() )
-                    {
+                    if (pinEnableCheckbox.isChecked()) {
                         pinUse = true;
 
                         gotoStage(10);
-                    }
-                    else
-                    {
+                    } else {
                         pinUse = false;
 
                         gotoStage(12);
@@ -127,14 +130,15 @@ public class NFCAuthenticationSetupActivity extends Activity {
                     break;
                 case 11:
                     // return to stage 6
-                        gotoStage(6);
+                    gotoStage(6);
                     break;
 
             }
         }
 
         if (v == findViewById(R.id.closeBtn)) {
-            finishActivity(-1);
+            this.setResult(RESULT_CANCELED);
+            finish();
         }
     }
 
@@ -159,7 +163,7 @@ public class NFCAuthenticationSetupActivity extends Activity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
 
-        if ( stage == 6 ) // where NFC is required
+        if (stage == 6) // where NFC is required
         {
             if (intent.getAction().equals(NfcAdapter.ACTION_TAG_DISCOVERED)) {
                 Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
@@ -167,46 +171,37 @@ public class NFCAuthenticationSetupActivity extends Activity {
                 nfcTagUUID = tag.getId();
 
                 // turn off reading mode
-                disableTagReading(nfcAdapter);
+                //disableTagReading(nfcAdapter);
             }
 
             // check if tag uuid is usable
 
-            if ( nfcTagUUID.length == 0 )
-            {
+            if (nfcTagUUID.length == 0) {
                 // exception - cannot use this tag.
                 // goto stage 11
 
                 gotoStage(11);
-            }
-            else
-            {
+            } else {
                 // tag has uuid. check if this tag dynamically generates uuid.
 
                 goNextStage();
             }
 
 
-
-        }
-        else if ( stage == 7 )
-        {
+        } else if (stage == 7) {
             // check if current uuid matches previous one.
 
-            if ( intent.getAction().equals(NfcAdapter.ACTION_TAG_DISCOVERED)) {
+            if (intent.getAction().equals(NfcAdapter.ACTION_TAG_DISCOVERED)) {
                 Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
 
                 // turn off reading mode
-                disableTagReading(nfcAdapter);
+                //disableTagReading(nfcAdapter);
 
-                if ( nfcTagUUID == tag.getId() )
-                {
+                if (EncryptionUtils.byteArrayToHex(nfcTagUUID).equals(EncryptionUtils.byteArrayToHex(tag.getId()))) {
                     // OK, can use this tag. goto next stage.
 
                     goNextStage();
-                }
-                else
-                {
+                } else {
                     // exception - cannot use this tag. This tag generates different uuid every time.
                     // goto stage 11
 
@@ -216,87 +211,86 @@ public class NFCAuthenticationSetupActivity extends Activity {
         }
     }
 
-    private void layoutInflater(int stage, RelativeLayout screen) {
+    private void layoutInflater(int stage) {
         switch (stage) {
             case 1:
                 flushScreen(screen);
 
-                View internal = getLayoutInflater().inflate(R.layout.nfcwizard01_start, null);
-                screen.addView(internal);
-
+                screen  = (RelativeLayout) getLayoutInflater().inflate(R.layout.nfcwizard01_start, parent, false);
+                parent.addView(screen);
                 break;
             case 2:
                 flushScreen(screen);
 
-                internal = getLayoutInflater().inflate(R.layout.nfcwizard02_generate_salt, null);
-                screen.addView(internal);
+                screen  = (RelativeLayout) getLayoutInflater().inflate(R.layout.nfcwizard02_generate_salt, parent, false);
+                parent.addView(screen);
                 break;
             case 3:
                 flushScreen(screen);
 
-                internal = getLayoutInflater().inflate(R.layout.nfcwizard03_generated_salt, null);
-                screen.addView(internal);
+                screen  = (RelativeLayout) getLayoutInflater().inflate(R.layout.nfcwizard03_generated_salt, parent, false);
+                parent.addView(screen);
                 break;
             case 4:
                 flushScreen(screen);
 
-                internal = getLayoutInflater().inflate(R.layout.nfcwizard04_notify_password_usage, null);
-                screen.addView(internal);
+                screen  = (RelativeLayout) getLayoutInflater().inflate(R.layout.nfcwizard04_notify_password_usage, parent, false);
+                parent.addView(screen);
                 break;
             case 5:
                 flushScreen(screen);
 
-                internal = getLayoutInflater().inflate(R.layout.nfcwizard05_get_password, null);
-                screen.addView(internal);
+                screen  = (RelativeLayout) getLayoutInflater().inflate(R.layout.nfcwizard05_get_password, parent, false);
+                parent.addView(screen);
                 break;
             case 6:
                 flushScreen(screen);
 
-                internal = getLayoutInflater().inflate(R.layout.nfcwizard06_check_token, null);
-                screen.addView(internal);
+                screen  = (RelativeLayout) getLayoutInflater().inflate(R.layout.nfcwizard06_check_token, parent, false);
+                parent.addView(screen);
                 break;
             case 7:
                 flushScreen(screen);
 
-                internal = getLayoutInflater().inflate(R.layout.nfcwizard07_check_token_again, null);
-                screen.addView(internal);
+                screen  = (RelativeLayout) getLayoutInflater().inflate(R.layout.nfcwizard07_check_token_again, parent, false);
+                parent.addView(screen);
                 break;
             case 8:
                 flushScreen(screen);
 
-                internal = getLayoutInflater().inflate(R.layout.nfcwizard08_token_success, null);
-                screen.addView(internal);
+                screen  = (RelativeLayout) getLayoutInflater().inflate(R.layout.nfcwizard08_token_success, parent, false);
+                parent.addView(screen);
                 break;
             case 9:
                 flushScreen(screen);
 
-                internal = getLayoutInflater().inflate(R.layout.nfcwizard09_ask_pin_validation, null);
-                screen.addView(internal);
+                screen  = (RelativeLayout) getLayoutInflater().inflate(R.layout.nfcwizard09_ask_pin_validation, parent, false);
+                parent.addView(screen);
                 break;
             case 10:
                 flushScreen(screen);
 
-                internal = getLayoutInflater().inflate(R.layout.nfcwizard10_get_pin, null);
-                screen.addView(internal);
+                screen  = (RelativeLayout) getLayoutInflater().inflate(R.layout.nfcwizard10_get_pin, parent, false);
+                parent.addView(screen);
                 break;
             case 11:
                 flushScreen(screen);
 
-                internal = getLayoutInflater().inflate(R.layout.nfcwizard11_token_fail, null);
-                screen.addView(internal);
+                screen  = (RelativeLayout) getLayoutInflater().inflate(R.layout.nfcwizard11_token_fail, parent, false);
+                parent.addView(screen);
                 break;
             case 12:
                 flushScreen(screen);
 
-                internal = getLayoutInflater().inflate(R.layout.nfcwizard12_nearly_done, null);
-                screen.addView(internal);
+                screen  = (RelativeLayout) getLayoutInflater().inflate(R.layout.nfcwizard12_nearly_done, parent, false);
+                parent.addView(screen);
                 break;
         }
 
     }
 
     private void flushScreen(RelativeLayout screen) {
-        screen.removeAllViews();
+        parent.removeView(screen);
     }
 
     public static void initSetting(SharedPreferences.Editor editor) {
@@ -322,34 +316,118 @@ public class NFCAuthenticationSetupActivity extends Activity {
     }
 
     private void gotoStage(int stage) {
-        this.stage = stage;
-        layoutInflater(stage, screen);
+        final Button nextBtn = (Button) findViewById(R.id.nextBtn);
 
-        if (stage == 6 || stage == 7) // where NFC is required
+        this.stage = stage;
+        layoutInflater(stage);
+
+        if (stage == 2) {
+            // disable next button
+            nextBtn.setEnabled(false);
+
+            // generate salt
+
+            salt = PBKDF2Helper.makeSalt();
+
+            // enable next button
+            nextBtn.setEnabled(true);
+
+            goNextStage();
+        } else if (stage == 5) {
+            nextBtn.setEnabled(false);
+
+            final EditText passwordInput = (EditText) findViewById(R.id.passwordInput);
+            EditText passwordReInput = (EditText) findViewById(R.id.passwordReInput);
+
+            passwordReInput.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    if ( s.toString().equals(passwordInput.getText().toString()) )
+                    {
+                        nextBtn.setEnabled(true);
+                    }
+                    else
+                    {
+                        nextBtn.setEnabled(false);
+                    }
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
+        } else if (stage == 6) // where NFC is required
         {
+            nextBtn.setEnabled(false);
+
             enableTagReading(nfcAdapter);
         }
-
-        if ( stage == 12 )
+        else if ( stage == 8 )
         {
+            nextBtn.setEnabled(true);
+        }
+        else if (stage == 9) {
+            nextBtn.setEnabled(true);
+        } else if (stage == 10) {
+            nextBtn.setEnabled(false);
+
+            final EditText pinInput = (EditText) findViewById(R.id.pinInput);
+            EditText pinReInput = (EditText) findViewById(R.id.pinReInput);
+
+            pinReInput.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    if ( s.toString().equals(pinInput.getText().toString()) )
+                    {
+                        nextBtn.setEnabled(true);
+                    }
+                    else
+                    {
+                        nextBtn.setEnabled(false);
+                    }
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
+
+        }
+        else if ( stage == 11 )
+        {
+            nextBtn.setEnabled(true);
+        }
+        else if (stage == 12) {
+            nextBtn.setEnabled(false);
             // do the work
 
-            if ( finalStage(nfcTagUUID, salt, password, pinUse, PIN) )
-            {
-                finishActivity(0);
-            }
-            else
-            {
-                finishActivity(-1);
+            if (finalStage(nfcTagUUID, salt, password, pinUse, PIN)) {
+                this.setResult(RESULT_OK);
+                Toast.makeText(this, "NFC auth enabled", Toast.LENGTH_LONG).show();
+                finish();
+            } else {
+                this.setResult(RESULT_CANCELED);
+                Toast.makeText(this, "NFC auth failed to enable", Toast.LENGTH_LONG).show();
+                finish();
             }
 
         }
     }
 
-    private boolean finalStage (byte[] nfcTagUUID, byte[] salt, String toProtect, boolean isPIN, String PIN)
-    {
-        try
-        {
+    private boolean finalStage(byte[] nfcTagUUID, byte[] salt, String toProtect, boolean isPIN, String PIN) {
+        try {
             // based on input, write to sharedPref
 
             editor.putString("deviceSalt", EncryptionUtils.byteArrayToHex(salt));
@@ -359,12 +437,9 @@ public class NFCAuthenticationSetupActivity extends Activity {
 
             byte[] aesPassword;
 
-            if ( isPIN )
-            {
+            if (isPIN) {
                 aesPassword = PBKDF2Helper.createSaltedHash(nfcTagUUIDHex + PIN, salt);
-            }
-            else
-            {
+            } else {
                 aesPassword = PBKDF2Helper.createSaltedHash(nfcTagUUIDHex, salt);
             }
 

@@ -1,15 +1,22 @@
 package moe.minori.pgpclipper.activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
+import android.nfc.NfcAdapter;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.TextWatcher;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
@@ -23,8 +30,18 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 import moe.minori.pgpclipper.R;
+import moe.minori.pgpclipper.encryption.AESHelper;
+import moe.minori.pgpclipper.encryption.PBKDF2Helper;
+import moe.minori.pgpclipper.util.EncryptionUtils;
 
 /**
  * Created by Minori on 2015-09-26.
@@ -45,13 +62,17 @@ public class PGPClipperQuickReplyActivity extends Activity {
 
     TextView nfcSignatureNotice;
 
+    NfcAdapter adapter;
+    SharedPreferences preferences;
+
+    String pgpKeyPassword = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String currentTheme = sharedPreferences.getString("themeSelection", "dark");
 
-        switch (currentTheme)
-        {
+        switch (currentTheme) {
             case "dark":
                 setTheme(R.style.PseudoDialogDarkTheme);
                 break;
@@ -69,26 +90,28 @@ public class PGPClipperQuickReplyActivity extends Activity {
         replyTextField = (EditText) findViewById(R.id.replyText);
         nfcSignatureNotice = (TextView) findViewById(R.id.nfcNotificationText);
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        // get nfc adapter
 
-        if ( preferences.getBoolean("enableNFCAuth", false) )
-        {
+        adapter = NfcAdapter.getDefaultAdapter(this);
+
+        preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+        if (preferences.getBoolean("enableNFCAuth", false) && adapter.isEnabled()) {
             nfcSignatureNotice.setVisibility(View.VISIBLE);
-        }
-        else
-        {
+            enableTagReading(adapter);
+        } else {
             nfcSignatureNotice.setVisibility(View.INVISIBLE);
         }
 
         //setting hint if sender's signature key found
         String[] keyIDs = intent.getStringArrayExtra("KEY_ID");
-        if(keyIDs != null) {
+        if (keyIDs != null) {
             String strConcatId = "";
             for (String id : keyIDs) {
                 strConcatId += id;
                 strConcatId += ", ";
             }
-            if(strConcatId.endsWith(", ")){
+            if (strConcatId.endsWith(", ")) {
                 strConcatId = strConcatId.substring(0, strConcatId.lastIndexOf(", "));
             }
             replyTextField.setHint(getString(R.string.hintRecipient) + strConcatId);
@@ -96,32 +119,25 @@ public class PGPClipperQuickReplyActivity extends Activity {
 
         String currentPgpProvider = preferences.getString("pgpServiceProviderApp", null);
 
-        if ( currentPgpProvider == null || "".equals(currentPgpProvider))
-        {
+        if (currentPgpProvider == null || "".equals(currentPgpProvider)) {
             // Default security provider is not set
             Log.e("PGPClipperService", "Security provider is not set!");
-        }
-        else
-        {
+        } else {
             Log.d("PGPClipperService", "Current security provider: " + currentPgpProvider);
 
             serviceConnection = new OpenPgpServiceConnection(this, currentPgpProvider);
             serviceConnection.bindToService();
 
         }
+
     }
 
-    private void tryEncryption ()
-    {
-        if ( serviceConnection.isBound() )
-        {
-            if ( intent != null )
-            {
+    private void tryEncryption() {
+        if (serviceConnection.isBound()) {
+            if (intent != null) {
                 attemptPgpApiAccess(replyTextField.getText().toString());
             }
-        }
-        else
-        {
+        } else {
             Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
@@ -137,42 +153,58 @@ public class PGPClipperQuickReplyActivity extends Activity {
         super.onResume();
 
         overridePendingTransition(0, 0);
+
+        if (nfcSignatureNotice.getVisibility() == View.VISIBLE) {
+            enableTagReading(adapter);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        disableTagReading(adapter);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
 
-        if ( serviceConnection != null )
+        if (serviceConnection != null)
             serviceConnection.unbindFromService();
+
     }
+
+    private void enableTagReading(NfcAdapter adapter) {
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+
+        adapter.enableForegroundDispatch(this, pendingIntent, null, null);
+    }
+
+    private void disableTagReading(NfcAdapter adapter) {
+        adapter.disableForegroundDispatch(this);
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if ( resultCode == RESULT_OK )
-        {
-            switch (requestCode)
-            {
-                case 5298:
-                {
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case 5298: {
                     String[] keyIDs = intent.getStringArrayExtra("KEY_ID");
-                    if ( keyIDs != null )
-                    {
+                    if (keyIDs != null) {
                         data.putExtra(OpenPgpApi.EXTRA_USER_IDS, keyIDs);
                     }
 
                     data.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true);
 
-                    if ( sigCheckBox.isChecked() )
-                    {
+                    if (sigCheckBox.isChecked()) {
                         // signature + encryption
 
                         data.setAction(OpenPgpApi.ACTION_SIGN_AND_ENCRYPT);
-                    }
-                    else
-                    {
+                    } else {
                         // only encryption
 
                         data.setAction(OpenPgpApi.ACTION_ENCRYPT);
@@ -182,24 +214,18 @@ public class PGPClipperQuickReplyActivity extends Activity {
                     InputStream is;
                     ByteArrayOutputStream os = new ByteArrayOutputStream();
 
-                    try
-                    {
+                    try {
                         is = new ByteArrayInputStream(replyTextField.getText().toString().getBytes("UTF-8"));
-                    }
-                    catch (UnsupportedEncodingException e)
-                    {
+                    } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
                         return;
                     }
 
                     OpenPgpApi api = new OpenPgpApi(this, serviceConnection.getService());
 
-                    if ( sigCheckBox.isChecked() )
-                    {
+                    if (sigCheckBox.isChecked()) {
                         api.executeApiAsync(data, is, os, new CallBack(os, REQUEST_CODE_SIGN_AND_ENCRYPT));
-                    }
-                    else
-                    {
+                    } else {
                         api.executeApiAsync(data, is, os, new CallBack(os, REQUEST_CODE_ENCRYPT));
                     }
                 }
@@ -208,84 +234,181 @@ public class PGPClipperQuickReplyActivity extends Activity {
     }
 
 
-    private void attemptPgpApiAccess (String input)
-    {
+    private void attemptPgpApiAccess(String input) {
         // try encryption (optionally signature) and copy data into clipboard
 
         Intent data = new Intent();
         String[] keyIDs = intent.getStringArrayExtra("KEY_ID");
-        if( keyIDs != null)
-        {
+        if (keyIDs != null) {
             data.putExtra(OpenPgpApi.EXTRA_USER_IDS, intent.getStringArrayExtra("KEY_ID"));
         }
 
         data.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true);
-        if ( sigCheckBox.isChecked() )
-        {
-            // signature + encryption
 
+        if ( pgpKeyPassword != null )
+        {
+            // always sign
             data.setAction(OpenPgpApi.ACTION_SIGN_AND_ENCRYPT);
+            data.putExtra("EXTRA_PASSPHRASE", pgpKeyPassword.toCharArray());
         }
         else
         {
-            // only encryption
+            if (sigCheckBox.isChecked()) {
+                // signature + encryption
 
-            data.setAction(OpenPgpApi.ACTION_ENCRYPT);
+                data.setAction(OpenPgpApi.ACTION_SIGN_AND_ENCRYPT);
+            } else {
+                // only encryption
+
+                data.setAction(OpenPgpApi.ACTION_ENCRYPT);
+
+            }
 
         }
 
         InputStream is;
         ByteArrayOutputStream os = new ByteArrayOutputStream();
 
-        try
-        {
+        try {
             is = new ByteArrayInputStream(input.getBytes("UTF-8"));
-        }
-        catch (UnsupportedEncodingException e)
-        {
+        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             return;
         }
 
         OpenPgpApi api = new OpenPgpApi(this, serviceConnection.getService());
 
-        if ( sigCheckBox.isChecked() )
-        {
+        if (sigCheckBox.isChecked() || pgpKeyPassword != null ) {
             api.executeApiAsync(data, is, os, new CallBack(os, REQUEST_CODE_SIGN_AND_ENCRYPT));
-        }
-        else
-        {
+        } else {
             api.executeApiAsync(data, is, os, new CallBack(os, REQUEST_CODE_ENCRYPT));
         }
 
     }
 
-    public void onClick (View v)
-    {
+    public void onClick(View v) {
         tryEncryption();
     }
 
-    private class CallBack implements OpenPgpApi.IOpenPgpCallback
-    {
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        if (intent.getAction().equals(NfcAdapter.ACTION_TAG_DISCOVERED)) {
+            final Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+
+            // is PIN enabled?
+
+            boolean isPIN = preferences.getBoolean("isPIN", false);
+            final String[] PIN = new String[1];
+            final AlertDialog[] dialog = new AlertDialog[1];
+
+            if (isPIN) {
+                // Ask user about PIN
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+                builder.setTitle("NFC PIN");
+                builder.setMessage("Input PIN");
+
+                final EditText input = new EditText(this);
+                input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+                input.setTransformationMethod(PasswordTransformationMethod.getInstance());
+
+
+                input.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        if (s.length() == 4) {
+                            PIN[0] = s.toString();
+                            dialog[0].dismiss();
+
+                            tryNfcSignEncryption(EncryptionUtils.byteArrayToHex(tag.getId()), PIN[0]);
+                        }
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+
+                    }
+                });
+
+                builder.setView(input);
+
+                dialog[0] = builder.show();
+            } else {
+                tryNfcSignEncryption(EncryptionUtils.byteArrayToHex(tag.getId()));
+            }
+
+        }
+    }
+
+    private void tryNfcSignEncryption(String nfcUUID, String PIN) {
+        try {
+            // get device salt
+            byte[] salt = EncryptionUtils.hexToByteArray(preferences.getString("deviceSalt", null));
+
+            if (salt == null) {
+                throw new Exception("System does not have salt value, but wizard has somehow finished");
+            }
+
+            // first generate aes password.
+            byte[] aesPassword;
+
+            if (PIN != null)
+                aesPassword = PBKDF2Helper.createSaltedHash(nfcUUID + PIN, salt);
+            else
+                aesPassword = PBKDF2Helper.createSaltedHash(nfcUUID, salt);
+
+            // aes password generated, try decryption
+            byte [] encryptedData = EncryptionUtils.stringToByteArray(preferences.getString("encryptedKeyPass", null));
+            if ( encryptedData == null )
+                throw new Exception("System does not have encrypted password, but wizard has somehow finished");
+
+            byte [] decryptedData;
+
+            decryptedData = AESHelper.decrypt(encryptedData, aesPassword);
+
+            pgpKeyPassword = EncryptionUtils.byteArrayToString(decryptedData);
+
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException | IllegalBlockSizeException | NoSuchPaddingException | BadPaddingException e) {
+            e.printStackTrace();
+        } catch (InvalidKeyException e) {
+            // NFC token or PIN was wrong.
+            nfcSignatureNotice.setText("Credential was wrong, try again");
+            pgpKeyPassword = null;
+            enableTagReading(adapter);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void tryNfcSignEncryption(String nfcUUID) {
+        tryNfcSignEncryption(nfcUUID, null);
+    }
+
+    private class CallBack implements OpenPgpApi.IOpenPgpCallback {
 
         ByteArrayOutputStream os;
         int requestCode;
 
-        private CallBack(ByteArrayOutputStream os, int requestCode)
-        {
+        private CallBack(ByteArrayOutputStream os, int requestCode) {
             this.os = os;
             this.requestCode = requestCode;
         }
 
         @Override
         public void onReturn(Intent result) {
-            switch (result.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR) )
-            {
-                case OpenPgpApi.RESULT_CODE_SUCCESS:
-                {
-                    try
-                    {
-                        //TODO: Use this somewhere!
+            switch (result.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
+                case OpenPgpApi.RESULT_CODE_SUCCESS: {
+                    try {
                         String finalResult = os.toString("UTF-8");
 
                         ClipboardManager clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
@@ -294,31 +417,23 @@ public class PGPClipperQuickReplyActivity extends Activity {
 
                         finish();
 
-                    }
-                    catch (UnsupportedEncodingException e) {
+                    } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }
 
                     break;
                 }
-                case OpenPgpApi.RESULT_CODE_USER_INTERACTION_REQUIRED:
-                {
+                case OpenPgpApi.RESULT_CODE_USER_INTERACTION_REQUIRED: {
                     PendingIntent pi = result.getParcelableExtra(OpenPgpApi.RESULT_INTENT);
 
-                    try
-                    {
+                    try {
                         PGPClipperQuickReplyActivity.this.startIntentSenderFromChild(PGPClipperQuickReplyActivity.this, pi.getIntentSender(), 5298, null, 0, 0, 0);
-                    }
-                    catch (IntentSender.SendIntentException e)
-                    {
+                    } catch (IntentSender.SendIntentException e) {
                         e.printStackTrace();
                     }
                     break;
                 }
-                case OpenPgpApi.RESULT_CODE_ERROR:
-                {
-                    //TODO: Show user error dialog
-
+                case OpenPgpApi.RESULT_CODE_ERROR: {
                     replyTextField.setText(R.string.errorCannotContinue);
 
                     break;

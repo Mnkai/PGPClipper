@@ -18,18 +18,17 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Using PIN with NFC tag can protect you from possible NFC skimming attack.\nUse PIN with NFC authentication?"
         android:id="@+id/textView3"
+        android:gravity="center"
         android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:gravity="center" />
+        android:layout_centerHorizontal="true" />
 
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Use PIN"
         android:id="@+id/isPinEnabled"
+        android:checked="true"
         android:layout_below="@+id/textView3"
-        android:layout_centerHorizontal="true"
-        android:checked="true" />
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
