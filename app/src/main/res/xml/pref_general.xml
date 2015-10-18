@@ -6,6 +6,11 @@
         android:summary="@string/enabledServiceSummary"
         android:defaultValue="false" />
 
+    <CheckBoxPreference
+        android:key="enableNFCAuth"
+        android:title="@string/enableNFCAuth"
+        android:summary="@string/enableNFCAuthSummary"
+        android:defaultValue="false" />
 
     <org.openintents.openpgp.util.OpenPgpAppPreference
         android:key="pgpServiceProviderApp"

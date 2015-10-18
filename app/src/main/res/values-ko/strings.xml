@@ -19,4 +19,7 @@
     <string name="darkText">어두운 테마</string>
     <string name="lightText">밝은 테마</string>
     <string name="themeStyleText">테마 설정</string>
+    <string name="enableNFCAuth">NFC 인증 활성화</string>
+    <string name="enableNFCAuthSummary">이 옵선을 선택해 PGPClipper가 NFC 토큰을 사용해 사인을 할 수 있도록 합니다.\n이 기능을 활성화하면 이 어플리케이션은 PGP 암호를 **저장 할 것입니다**.</string>
+    <string name="tryAgainText">다시 시도하려면 결과 필드를 누르세요</string>
 </resources>
