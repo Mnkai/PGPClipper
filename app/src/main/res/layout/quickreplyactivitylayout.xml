@@ -42,5 +42,6 @@
         android:text="Tap NFC token now to sign and encrypt this message"
         android:id="@+id/nfcNotificationText"
         android:layout_below="@+id/replyText"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:gravity="center" />
 </RelativeLayout>

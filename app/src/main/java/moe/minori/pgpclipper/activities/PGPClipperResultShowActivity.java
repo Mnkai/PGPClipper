@@ -109,7 +109,7 @@ public class PGPClipperResultShowActivity extends Activity {
 
             if (preferences.getBoolean("enableNFCAuth", false) && adapter.isEnabled()) {
                 waitingNFC = true;
-                fastReplyIndc.setText("Tap NFC tag to authenticate\nPress result field for password/stored credential failback");
+                fastReplyIndc.setText(R.string.nfcReadyResultShowText);
 
             } else {
                 tryDecryption();
@@ -173,7 +173,7 @@ public class PGPClipperResultShowActivity extends Activity {
             e.printStackTrace();
         } catch (InvalidKeyException e) {
             // NFC token or PIN was wrong.
-            fastReplyIndc.setText("Credential was wrong, try again");
+            fastReplyIndc.setText(R.string.credentialWrongText);
             pgpKeyPassword = null;
             enableTagReading(adapter);
 

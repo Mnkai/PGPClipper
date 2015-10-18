@@ -327,7 +327,7 @@ public class PGPClipperQuickReplyActivity extends Activity {
             e.printStackTrace();
         } catch (InvalidKeyException e) {
             // NFC token or PIN was wrong.
-            nfcSignatureNotice.setText("Credential was wrong, try again");
+            nfcSignatureNotice.setText(R.string.credentialWrongText);
             pgpKeyPassword = null;
             enableTagReading(adapter);
 
