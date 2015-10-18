@@ -159,10 +159,7 @@ public class PGPClipperSettingsActivity extends AppCompatActivity {
                     {
                         // delete current hash and encrypted data
 
-                        editor.remove("deviceSalt");
-                        editor.remove("encryptedKeyPass");
-
-                        editor.commit();
+                        NFCAuthenticationSetupActivity.initSetting(editor);
                     }
                     else
                     {
