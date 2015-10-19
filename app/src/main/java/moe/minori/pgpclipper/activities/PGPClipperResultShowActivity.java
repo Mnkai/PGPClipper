@@ -124,6 +124,7 @@ public class PGPClipperResultShowActivity extends Activity {
             final Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
 
             tryNfcDecryption(EncryptionUtils.byteArrayToHex(tag.getId()));
+            waitingNFC = false;
         }
     }
 

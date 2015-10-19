@@ -95,7 +95,7 @@ public class PGPClipperQuickReplyActivity extends Activity {
             nfcSignatureNotice.setVisibility(View.VISIBLE);
 
         } else {
-            nfcSignatureNotice.setVisibility(View.INVISIBLE);
+            nfcSignatureNotice.setVisibility(View.GONE);
         }
 
         //setting hint if sender's signature key found
@@ -228,16 +228,19 @@ public class PGPClipperQuickReplyActivity extends Activity {
         Intent data = new Intent();
         String[] keyIDs = intent.getStringArrayExtra("KEY_ID");
         if (keyIDs != null) {
+            Log.d("QuickReplyActivity", "keyID found, embedding");
             data.putExtra(OpenPgpApi.EXTRA_USER_IDS, intent.getStringArrayExtra("KEY_ID"));
         }
 
         data.putExtra(OpenPgpApi.EXTRA_REQUEST_ASCII_ARMOR, true);
 
-        if (pgpKeyPassword != null) {
+        if (pgpKeyPassword != null) { // pgpKeyPassword provided - NFC token
             // always sign
             data.setAction(OpenPgpApi.ACTION_SIGN_AND_ENCRYPT);
             data.putExtra(OpenPgpApi.EXTRA_PASSPHRASE, pgpKeyPassword.toCharArray());
-        } else {
+        }
+        else
+        {
             if (sigCheckBox.isChecked()) {
                 // signature + encryption
 
@@ -360,6 +363,9 @@ public class PGPClipperQuickReplyActivity extends Activity {
                     break;
                 }
                 case OpenPgpApi.RESULT_CODE_USER_INTERACTION_REQUIRED: {
+
+                    Log.d("QuickReplyActivity", "Interaction required");
+
                     PendingIntent pi = result.getParcelableExtra(OpenPgpApi.RESULT_INTENT);
 
                     try {
