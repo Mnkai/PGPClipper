@@ -164,13 +164,22 @@ public class PGPClipperQuickReplyActivity extends Activity {
     }
 
     private void enableTagReading(NfcAdapter adapter) {
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+        try {
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
 
-        adapter.enableForegroundDispatch(this, pendingIntent, null, null);
+            adapter.enableForegroundDispatch(this, pendingIntent, null, null);
+        } catch (Exception e) {
+            // ignore
+        }
     }
 
     private void disableTagReading(NfcAdapter adapter) {
-        adapter.disableForegroundDispatch(this);
+        try {
+            adapter.disableForegroundDispatch(this);
+        } catch (Exception e) {
+            // ignore
+        }
+
     }
 
 
@@ -238,9 +247,7 @@ public class PGPClipperQuickReplyActivity extends Activity {
             // always sign
             data.setAction(OpenPgpApi.ACTION_SIGN_AND_ENCRYPT);
             data.putExtra(OpenPgpApi.EXTRA_PASSPHRASE, pgpKeyPassword.toCharArray());
-        }
-        else
-        {
+        } else {
             if (sigCheckBox.isChecked()) {
                 // signature + encryption
 
@@ -319,7 +326,7 @@ public class PGPClipperQuickReplyActivity extends Activity {
 
             tryEncryption();
 
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException | IllegalBlockSizeException | NoSuchPaddingException e ) {
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException | IllegalBlockSizeException | NoSuchPaddingException e) {
             e.printStackTrace();
         } catch (InvalidKeyException | BadPaddingException e2) {
             // NFC token or PIN was wrong.
