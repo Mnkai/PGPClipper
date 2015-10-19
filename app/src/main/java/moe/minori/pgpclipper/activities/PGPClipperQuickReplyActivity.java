@@ -283,6 +283,7 @@ public class PGPClipperQuickReplyActivity extends Activity {
 
     public void onClick(View v) {
         tryEncryption();
+        disableTagReading(adapter);
     }
 
     @Override
@@ -294,7 +295,7 @@ public class PGPClipperQuickReplyActivity extends Activity {
 
 
             tryNfcSignEncryption(EncryptionUtils.byteArrayToHex(tag.getId()));
-
+            disableTagReading(adapter);
 
         }
     }
@@ -332,7 +333,7 @@ public class PGPClipperQuickReplyActivity extends Activity {
             // NFC token or PIN was wrong.
             nfcSignatureNotice.setText(R.string.credentialWrongText);
             pgpKeyPassword = null;
-            //enableTagReading(adapter);
+            enableTagReading(adapter);
 
         } catch (Exception e) {
             e.printStackTrace();

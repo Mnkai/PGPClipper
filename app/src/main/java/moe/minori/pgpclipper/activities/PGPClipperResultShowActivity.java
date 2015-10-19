@@ -125,6 +125,7 @@ public class PGPClipperResultShowActivity extends Activity {
 
             tryNfcDecryption(EncryptionUtils.byteArrayToHex(tag.getId()));
             waitingNFC = false;
+            disableTagReading(adapter);
         }
     }
 
@@ -207,6 +208,13 @@ public class PGPClipperResultShowActivity extends Activity {
                 }, 500);
             }
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        disableTagReading(adapter);
     }
 
     @Override
