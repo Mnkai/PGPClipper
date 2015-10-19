@@ -66,8 +66,6 @@ public class PGPClipperResultShowActivity extends Activity {
 
     boolean waitingNFC = false;
 
-    boolean complete = false;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -183,6 +181,8 @@ public class PGPClipperResultShowActivity extends Activity {
     }
 
     private void tryDecryption() {
+        Log.d("ResultShowActivity", "tryDecryption called");
+
         if (serviceConnection != null) {
             if (serviceConnection.isBound()) {
                 if (intent != null) {
@@ -206,8 +206,7 @@ public class PGPClipperResultShowActivity extends Activity {
 
         overridePendingTransition(0, 0);
 
-        if ( waitingNFC )
-        {
+        if (waitingNFC) {
             // start adapter listening
 
             enableTagReading(adapter);
@@ -237,7 +236,6 @@ public class PGPClipperResultShowActivity extends Activity {
     }
 
 
-
     private void attemptPgpApiAccess(String input) {
         // PGP data (possibly) detected, try using OpenPGP API
 
@@ -245,8 +243,11 @@ public class PGPClipperResultShowActivity extends Activity {
 
         Intent data = new Intent();
         data.setAction(OpenPgpApi.ACTION_DECRYPT_VERIFY);
-        if ( pgpKeyPassword != null )
+        if (pgpKeyPassword != null) {
+            Log.d("ResultShowActivity", "Key applied - embedding key");
             data.putExtra(OpenPgpApi.EXTRA_PASSPHRASE, pgpKeyPassword.toCharArray());
+        }
+
 
         InputStream is;
         ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -263,9 +264,9 @@ public class PGPClipperResultShowActivity extends Activity {
     }
 
     public void onClick(View v) {
-        if (!complete) {
+        if (waitingNFC) {
             disableTagReading(adapter);
-
+            waitingNFC = false;
             tryDecryption();
         } else if (isReplyable) {
             // start quick reply activity
@@ -311,53 +312,48 @@ public class PGPClipperResultShowActivity extends Activity {
         public void onReturn(Intent result) {
             switch (result.getIntExtra(OpenPgpApi.RESULT_CODE, OpenPgpApi.RESULT_CODE_ERROR)) {
                 case OpenPgpApi.RESULT_CODE_SUCCESS: {
-                    if (requestCode == REQUEST_CODE_DECRYPT_AND_VERIFY) {
-                        try {
-                            //TODO: Use this somewhere!
-                            String finalResult = os.toString("UTF-8");
-                            OpenPgpSignatureResult signatureResult = result.getParcelableExtra(OpenPgpApi.RESULT_SIGNATURE);
-                            OpenPgpDecryptionResult decryptionResult = result.getParcelableExtra(OpenPgpApi.RESULT_DECRYPTION);
+                    try {
+                        //TODO: Use this somewhere!
+                        String finalResult = os.toString("UTF-8");
+                        OpenPgpSignatureResult signatureResult = result.getParcelableExtra(OpenPgpApi.RESULT_SIGNATURE);
+                        OpenPgpDecryptionResult decryptionResult = result.getParcelableExtra(OpenPgpApi.RESULT_DECRYPTION);
 
-                            if (signatureResult.getResult() == 1) {
-                                sigStatus.setText(getString(R.string.signatureStatusText) + "O \n(" + signatureResult.getPrimaryUserId() + ")");
-                                KEY_ID = signatureResult.getUserIds();
-                            } else {
-                                sigStatus.setText(getString(R.string.signatureStatusText) + "X");
-                            }
-
-
-                            if (decryptionResult.getResult() == 1) {
-                                decStatus.setText(getString(R.string.decryptionStatusText) + "O");
-                            } else {
-                                decStatus.setText(getString(R.string.decryptionStatusText) + "X");
-                            }
-
-                            if (finalResult != null) {
-                                decResult.setText(finalResult);
-                                fastReplyIndc.setText(R.string.fastReplyText);
-                                isReplyable = true;
-                            } else
-                                decResult.setText(R.string.errorCannotProcess);
-                        } catch (UnsupportedEncodingException e) {
-                            e.printStackTrace();
+                        if (signatureResult.getResult() == 1) {
+                            sigStatus.setText(getString(R.string.signatureStatusText) + "O \n(" + signatureResult.getPrimaryUserId() + ")");
+                            KEY_ID = signatureResult.getUserIds();
+                        } else {
+                            sigStatus.setText(getString(R.string.signatureStatusText) + "X");
                         }
 
-                        waitingNFC = false;
-                        complete = true;
 
+                        if (decryptionResult.getResult() == 1) {
+                            decStatus.setText(getString(R.string.decryptionStatusText) + "O");
+                        } else {
+                            decStatus.setText(getString(R.string.decryptionStatusText) + "X");
+                        }
+
+                        if (finalResult != null) {
+                            decResult.setText(finalResult);
+                            fastReplyIndc.setText(R.string.fastReplyText);
+                            isReplyable = true;
+                        } else
+                            decResult.setText(R.string.errorCannotProcess);
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
                     }
+
+                    break;
                 }
                 case OpenPgpApi.RESULT_CODE_USER_INTERACTION_REQUIRED: {
                     PendingIntent pi = result.getParcelableExtra(OpenPgpApi.RESULT_INTENT);
 
-                    if ( !complete && waitingNFC )
-                    {
-                        try {
-                            PGPClipperResultShowActivity.this.startIntentSenderFromChild(PGPClipperResultShowActivity.this, pi.getIntentSender(), 5298, null, 0, 0, 0);
-                        } catch (IntentSender.SendIntentException e) {
-                            e.printStackTrace();
-                        }
+                    Log.d("ResultShowActivity", "Interaction required, trying again");
+                    try {
+                        PGPClipperResultShowActivity.this.startIntentSenderFromChild(PGPClipperResultShowActivity.this, pi.getIntentSender(), 5298, null, 0, 0, 0);
+                    } catch (IntentSender.SendIntentException e) {
+                        e.printStackTrace();
                     }
+
 
                     break;
                 }
