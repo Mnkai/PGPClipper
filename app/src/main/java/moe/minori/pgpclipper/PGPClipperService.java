@@ -4,6 +4,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.ClipDescription;
 import android.content.ClipboardManager;
 import android.content.Intent;
 import android.os.IBinder;
@@ -48,12 +49,10 @@ public class PGPClipperService extends Service {
 
     }
 
-    private void startClipboardMonitoring ()
-    {
+    private void startClipboardMonitoring() {
         clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
 
-        if ( clipboardManager != null )
-        {
+        if (clipboardManager != null) {
             clipboardManager.addPrimaryClipChangedListener(onPrimaryClipChangedListener = new ClipboardManager.OnPrimaryClipChangedListener() {
                 @Override
                 public void onPrimaryClipChanged() {
@@ -62,18 +61,34 @@ public class PGPClipperService extends Service {
                     // get current clipboard data to string
                     String currentData;
 
-                    try {
-                        currentData = clipboardManager.getPrimaryClip().getItemAt(0).getText().toString();
-                    }
-                    catch (Exception e)
-                    {
+                    if (clipboardManager.hasPrimaryClip() && clipboardManager.getPrimaryClipDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
+
+                        try {
+                            currentData = clipboardManager.getPrimaryClip().getItemAt(0).getText().toString();
+                        } catch (NullPointerException e) {
+                            // should not happen since clipboard contains text, but returned null.
+                            // best effort String parsing
+
+                            try {
+                                currentData = clipboardManager.getPrimaryClip().getItemAt(0).coerceToText(PGPClipperService.this).toString();
+
+                            } catch (Exception e2) {
+                                // best attempt failed... return this method
+
+                                return;
+                            }
+
+                        }
+                    } else {
                         return;
                     }
 
+                    // tidy once
+                    currentData = PGPBlockDetector.pgpInputTidy(currentData);
+
                     // check if this contains ASCII armored PGP data
 
-                    if (PGPBlockDetector.isBlockPresent(currentData))
-                    {
+                    if (PGPBlockDetector.isBlockPresent(currentData)) {
                         // notify user
 
                         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
@@ -110,10 +125,8 @@ public class PGPClipperService extends Service {
 
         Log.d("PGPClipperService", "onStartCommand called!");
 
-        if ( intent != null )
-        {
-            if ( intent.getBooleanExtra(TRY_DECRYPT, false) )
-            {
+        if (intent != null) {
+            if (intent.getBooleanExtra(TRY_DECRYPT, false)) {
                 Log.d("PGPClipperService", "Trying Decryption/Verification");
                 Intent launchActivity = new Intent(getApplicationContext(), PGPClipperResultShowActivity.class);
                 launchActivity.putExtra(DATA, intent.getStringExtra(DATA));
@@ -127,10 +140,8 @@ public class PGPClipperService extends Service {
         return START_STICKY;
     }
 
-    private void stopClipboardMonitoring()
-    {
-        if ( onPrimaryClipChangedListener != null )
-        {
+    private void stopClipboardMonitoring() {
+        if (onPrimaryClipChangedListener != null) {
             clipboardManager.removePrimaryClipChangedListener(onPrimaryClipChangedListener);
         }
     }
