@@ -20,7 +20,7 @@ OpenPGP API Library, Apache License 2.0
 Apache License 2.0, see LICENSE for more details and full license.
 
 # Contributers
-Look at contributers tab in repository information.
+Look at contributers tab in repository information. For translation contributers, visit https://www.transifex.com/mnetwork/teams/55577/
 
 # I guess you are lazy.
 Yes, I am. Check out release pane or Google Play Store link for more information.
