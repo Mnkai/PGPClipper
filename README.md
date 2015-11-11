@@ -4,6 +4,9 @@ PGPClipper for Android repository
 # Build
 Build using Android Studio. Or visit F-Droid for prebuilt release.
 
+# Contribution
+You can help translating this app in different languages. Visit https://www.transifex.com/mnetwork/pgpclipper/ for Transifex translation dashboard.
+
 # F-Droid
 https://f-droid.org/repository/browse/?fdfilter=pgpclipper&fdid=moe.minori.pgpclipper
 
