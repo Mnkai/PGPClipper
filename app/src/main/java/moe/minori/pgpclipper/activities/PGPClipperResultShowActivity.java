@@ -289,7 +289,18 @@ public class PGPClipperResultShowActivity extends Activity {
             // start quick reply activity
             Intent intent = new Intent(this, PGPClipperQuickReplyActivity.class);
             if (KEY_ID != null) {
-                intent.putExtra("KEY_ID", convertToStringArray(KEY_ID));
+
+                // KEY_ID may not have e-mail address to associate with pgp key - thus causing parsing error - Thanks ibanferreira!
+                // issue number #8: https://github.com/Mnkai/PGPClipper/issues/8
+                try
+                {
+                    intent.putExtra("KEY_ID", convertToStringArray(KEY_ID));
+                }
+                catch (StringIndexOutOfBoundsException e)
+                {
+                    // ignore, treat as null KEY_ID variable
+                }
+
             }
 
             startActivity(intent);
