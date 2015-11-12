@@ -313,17 +313,26 @@ public class PGPClipperResultShowActivity extends Activity {
     }
 
 
-    private String[] convertToStringArray(ArrayList<String> input) {
-        String[] toReturn = new String[input.size()];
+    private String[] convertToStringArray(ArrayList<String> input) throws StringIndexOutOfBoundsException {
 
-        for (int i = 0; i < input.size(); i++) {
-            int startIdx = input.get(i).lastIndexOf("<");
-            int endIdx = input.get(i).lastIndexOf(">");
+        try
+        {
+            String[] toReturn = new String[input.size()];
 
-            toReturn[i] = input.get(i).substring(startIdx + 1, endIdx);
+            for (int i = 0; i < input.size(); i++) {
+                int startIdx = input.get(i).lastIndexOf("<");
+                int endIdx = input.get(i).lastIndexOf(">");
+
+                toReturn[i] = input.get(i).substring(startIdx + 1, endIdx);
+            }
+
+            return toReturn;
+        }
+        catch (StringIndexOutOfBoundsException e)
+        {
+            throw e;
         }
 
-        return toReturn;
     }
 
     private class CallBack implements OpenPgpApi.IOpenPgpCallback {
