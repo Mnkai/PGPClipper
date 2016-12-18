@@ -1,3 +1,9 @@
+## Notice
+The application is deprecated, feel free to fork and continue on.<br/>
+Also, the need for this application has been diminished since Android now supports text selection share to applications.<br/>
+Support to this application will be limited from now on.<br/>
+In case of incompatibility with modern OpenKeyChain APIs, feel free to file issues in issue tracker since Author does not use this application in daily basis anymore.
+
 # PGPClipper
 PGPClipper for Android repository
 
