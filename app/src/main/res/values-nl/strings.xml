@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="enabledService">Service inschakelen</string>
+  <string name="enabledServiceSummary">Vink deze checkbox aan zodat PGPClipper actief blijft op de achtergrond.\nDeze applicatie maakt gebruik van klembord data.</string>
+  <string name="pgpServiceProviderAppTitleString">OpenPGP Service Provider status</string>
+  <string name="appVersionTitleString">Versie</string>
+  <string name="licenseTitleString">Licentie</string>
+  <string name="thirdPartyLicenseTitleString">Third Party Licentie</string>
+  <string name="issueTrackingTitleString">Issue tracking en broncode</string>
+  <string name="signatureToggleText">Andere handtekening</string>
+  <string name="replyText">Antwoorden</string>
+  <string name="processingResultText">Verwerkingsresultaat</string>
+  <string name="signatureStatusText">Handtekening Status:</string>
+  <string name="decryptionStatusText">Ontsleuteling Status:</string>
+  <string name="fastReplyText">Druk op resultaat veld voor snel antwoorden</string>
+  <string name="tryAgainText">Druk op het resultaat veld op opnieuw te proberen.</string>
+  <string name="NotificationTickerText">Mogelijke PGP gegevens ontdekt</string>
+  <string name="NotificationTitleText">Mogelijke PGP gegevens ontdekt</string>
+  <string name="NotificationContentText">Poging doen om te verwerken?</string>
+  <string name="darkText">Donker</string>
+  <string name="lightText">Licht</string>
+  <string name="themeStyleText">Thema instelling</string>
+  <string name="errorCannotProcess">kan niet verwerken</string>
+  <string name="errorCannotContinue">Error, kan niet verder gaan. Verstuur de foutomschrijving naar de auteur.</string>
+  <string name="hintRecipient">Aan:</string>
+  <string name="enableNFCAuth">NFC authenticatie inschakelen</string>
+  <string name="enableNFCAuthSummary">Vink deze checkbox aan om PGPClipper toe staan een handtekening met het NFC token te maken.\nOm deze functie in te schakelen slaat deze applicatie je PGP wachtwoord op.</string>
+  <string name="credentialWrongText">Gebruikersnaam/wachtwoord onjuist. Probeer opnieuw</string>
+  <string name="nfcReadyResultShowText">Tik op NFC token om te authenticeren\nDruk op resultaat veld om terug te vallen op wachtwoord</string>
+  <string name="nfcAuthenticationSetupWizardTitleText">NFC authenticatie setup wizard</string>
+  <string name="nfcWizard01Text">Deze wizard helpt je met NFC authenticatie.\n\nDruk volgende om door te gaan.\nDruk ieder moment op sluiten om deze wizard te sluiten.</string>
+  <string name="nfcWizard02Text">Bezig met genereren van salt-waarde voor versleuteling.\nEven geduld.</string>
+  <string name="nfcWizard03Text">PGPClipper heeft met success een salt-waarde gegenereerd.</string>
+  <string name="nfcWizard04Text">Geef het wachtwoord op van je standaard sleutel.\nDeze informatie wordt versleuteld.</string>
+  <string name="nfcWizard05PasswordInputText">Voer PGP wachtwoord in</string>
+  <string name="nfcWizard05PasswordReInputText">Voer PGP wachtwoord nogmaals in</string>
+  <string name="nfcWizard06Text">Tik op NFC token van je apparaat.</string>
+  <string name="nfcWizard07Text">Tik nogmaals op NFC token van je apparaat.</string>
+  <string name="nfcWizard08Text">NFC token gevonden.</string>
+  <string name="nfcWizard11Text">Dit NFC token kan niet gebruikt worden.</string>
+  <string name="nfcWizard12Text">Genereren van hash en bezig met versleutelen...\nDit kan lang duren (enkele minuten)\nafhankelijk van de snelheid van je apparaat.\n\nHet beeldscherm blijft aan.</string>
+  <string name="closeText">Sluiten</string>
+  <string name="nextText">Volgende</string>
+  <string name="quickReplyNFCNotificationText">Tik op NFC token om boodschap te ondertekenen en te versleutelen\nDruk op antwoorden om terug te vallen op het wachtwoord</string>
+</resources>
