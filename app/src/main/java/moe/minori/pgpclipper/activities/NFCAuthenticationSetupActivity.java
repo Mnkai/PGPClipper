@@ -71,7 +71,12 @@ public class NFCAuthenticationSetupActivity extends Activity {
 
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
 
-        if (!nfcAdapter.isEnabled()) {
+        if (nfcAdapter == null) {
+            Toast.makeText(this, "NFC hardware not available", Toast.LENGTH_LONG).show();
+            setResult(RESULT_CANCELED);
+            finish();
+        }
+        else if (!nfcAdapter.isEnabled()) {
             Toast.makeText(this, "Enable NFC in settings", Toast.LENGTH_LONG).show();
             startActivity(new Intent(Settings.ACTION_NFC_SETTINGS));
         }
