@@ -3,7 +3,7 @@
     <string name="enabledService">Enable Service</string>
     <string name="enabledServiceSummary">Check this box to allow PGPClipper stay alive in background.\nNote that this application *will* access clipboard data.</string>
     <string name="pgpServiceProviderAppTitleString">OpenPGP Service Provider status</string>
-    <string name="appVersionString" translatable="false">0.2</string>
+    <string name="appVersionString" translatable="false">0.21</string>
     <string name="appVersionTitleString">Version</string>
     <string name="licenseTitleString">License</string>
     <string name="licenseContentString" translatable="false">Apache License 2.0</string>
@@ -42,8 +42,8 @@
     <string name="nfcWizard07Text">Tap NFC token to your device again.</string>
     <string name="nfcWizard08Text">NFC token successfully detected.</string>
     <string name="nfcWizard11Text">This NFC token cannot be used.</string>
-    <string name="nfcWizard12Text">Generating hash and encrypting...\nThis might take a long time (few minutes)\ndepending on your device\'s power.\n\nScreen will stay on.</string>
+    <string name="nfcWizard12Text">Generating hash and encrypting…\nThis might take a long time (few minutes)\ndepending on your device\'s power.\n\nScreen will stay on.</string>
     <string name="closeText">Close</string>
     <string name="nextText">Next</string>
-    <string name="quickReplyNFCNotificationText">Tap NFC token to sign and encrypt message\nPress reply for password failback</string>
+    <string name="quickReplyNFCNotificationText">Tap NFC token to sign and encrypt message\nPress reply for password fallback</string>
 </resources>
