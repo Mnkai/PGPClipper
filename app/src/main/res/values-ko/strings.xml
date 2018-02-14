@@ -2,7 +2,7 @@
 <resources>
     <string name="appVersionTitleString">버전</string>
     <string name="enabledService">서비스 활성화</string>
-    <string name="enabledServiceSummary">이 옵션을 선택해 PGPClipper가 백그라운드에서 계속 실행되도록 허용합니다.\n이 어플리케이션은 클립보드의 데이터를 **접근 할 것입니다**.</string>
+    <string name="enabledServiceSummary">이 옵션을 선택해 PGPClipper가 백그라운드에서 계속 실행되도록 허용합니다.\n이 애플리케이션은 클립보드의 데이터를 **접근 할 것입니다**.</string>
     <string name="issueTrackingTitleString">이슈 트래킹 및 소스코드</string>
     <string name="licenseTitleString">라이센스</string>
     <string name="pgpServiceProviderAppTitleString">OpenPGP 서비스 제공자 상태</string>
@@ -20,7 +20,7 @@
     <string name="lightText">밝은 테마</string>
     <string name="themeStyleText">테마 설정</string>
     <string name="enableNFCAuth">NFC 인증 활성화</string>
-    <string name="enableNFCAuthSummary">이 옵선을 선택해 PGPClipper가 NFC 토큰을 사용해 사인을 할 수 있도록 합니다.\n이 기능을 활성화하면 이 어플리케이션은 PGP 암호를 **저장 할 것입니다**.</string>
+    <string name="enableNFCAuthSummary">이 옵선을 선택해 PGPClipper가 NFC 토큰을 사용해 사인을 할 수 있도록 합니다.\n이 기능을 활성화하면 이 애플리케이션은 PGP 암호를 **저장 할 것입니다**.</string>
     <string name="tryAgainText">다시 시도하려면 결과 필드를 누르세요</string>
     <string name="credentialWrongText">보안정보가 맞지 않았습니다. 다시 시도하세요.</string>
     <string name="errorCannotContinue">경고, 진행할 수 없습니다. 제작자에게 버그리포트를 보내세요.</string>
@@ -38,8 +38,10 @@
     <string name="nfcWizard07Text">장치에 NFC 토큰을 다시 대세요.</string>
     <string name="nfcWizard08Text">NFC 토큰 감지 성공</string>
     <string name="nfcWizard11Text">이 NFC 토큰은 사용할 수 없습니다.</string>
-    <string name="nfcWizard12Text">해시를 생성하고 암호화 중...\n이 작업은 장치의 성능에 따라 오래 걸릴 수 있습니다.\n\n작업이 완료될 때 까지 임시로 화면이 꺼지지 않습니다.</string>
+    <string name="nfcWizard12Text">해시를 생성하고 암호화 중…\n이 작업은 장치의 성능에 따라 오래 걸릴 수 있습니다.\n\n작업이 완료될 때 까지 임시로 화면이 꺼지지 않습니다.</string>
     <string name="closeText">닫기</string>
     <string name="nextText">다음</string>
     <string name="quickReplyNFCNotificationText">NFC 토큰을 대어 메세지를 암호화/사인\n답장 버튼을 눌러 패스워드 입력</string>
+    <string name="enableFingerprintAuth" >지문 인증 활성화</string>
+    <string name="enableFingerprintAuthSummary" >이 옵션을 선택해 PGPClipper가 지문을 사용해 사인을 할 수 있도록 합니다.\n이 기능을 활성화하면 이 애플리케이션은 PGP 암호를 **저장 할 것입니다**.</string>
 </resources>
