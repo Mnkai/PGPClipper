@@ -18,9 +18,9 @@
         android:summary="@string/enableFingerprintAuthSummary"
         android:defaultValue="false" />
 
-    <!--<org.openintents.openpgp.util.OpenPgpAppPreference
+    <org.openintents.openpgp.util.OpenPgpAppPreference
         android:key="pgpServiceProviderApp"
-        android:title="@string/pgpServiceProviderAppTitleString" />-->
+        android:title="@string/pgpServiceProviderAppTitleString" />
 
     <ListPreference
         android:key="themeSelection"
