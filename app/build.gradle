@@ -5,10 +5,10 @@ android {
     buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "moe.minori.pgpclipper"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 27
-        versionCode 4
-        versionName "0.2"
+        versionCode 5
+        versionName "0.21"
     }
     buildTypes {
         release {

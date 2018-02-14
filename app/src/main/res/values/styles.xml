@@ -5,11 +5,11 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="PseudoDialogLightTheme" parent="android:Theme.Holo.Light.Dialog">
+    <style name="PseudoDialogLightTheme" parent="android:Theme.Material.Light.Dialog">
 
     </style>
 
-    <style name="PseudoDialogDarkTheme" parent="android:Theme.Holo.Dialog">
+    <style name="PseudoDialogDarkTheme" parent="android:Theme.Material.Dialog">
 
     </style>
 
