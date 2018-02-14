@@ -46,4 +46,6 @@
     <string name="closeText">Close</string>
     <string name="nextText">Next</string>
     <string name="quickReplyNFCNotificationText">Tap NFC token to sign and encrypt message\nPress reply for password fallback</string>
+    <string name="enableFingerprintAuth">Enable Fingerprint Authentication</string>
+    <string name="enableFingerprintAuthSummary">Check this box to allow PGPClipper perform signature with fingerprint.\nNote that this application *will* store your PGP password if you enable this function.</string>
 </resources>
