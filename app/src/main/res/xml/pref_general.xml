@@ -12,9 +12,15 @@
         android:summary="@string/enableNFCAuthSummary"
         android:defaultValue="false" />
 
-    <org.openintents.openpgp.util.OpenPgpAppPreference
+    <CheckBoxPreference
+        android:key="enableFingerprintAuth"
+        android:title="@string/enableFingerprintAuth"
+        android:summary="@string/enableFingerprintAuthSummary"
+        android:defaultValue="false" />
+
+    <!--<org.openintents.openpgp.util.OpenPgpAppPreference
         android:key="pgpServiceProviderApp"
-        android:title="@string/pgpServiceProviderAppTitleString" />
+        android:title="@string/pgpServiceProviderAppTitleString" />-->
 
     <ListPreference
         android:key="themeSelection"
