@@ -357,7 +357,7 @@ public class PGPClipperResultShowActivity extends Activity {
 
                         if (signatureResult.getResult() == 1) {
                             sigStatus.setText(getString(R.string.signatureStatusText) + "O \n(" + signatureResult.getPrimaryUserId() + ")");
-                            KEY_ID = signatureResult.getUserIds();
+                            KEY_ID = (ArrayList<String>) signatureResult.getUserIds();
                         } else {
                             sigStatus.setText(getString(R.string.signatureStatusText) + "X");
                         }
