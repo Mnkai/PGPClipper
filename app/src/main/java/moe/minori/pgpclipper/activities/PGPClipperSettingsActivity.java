@@ -157,7 +157,7 @@ public class PGPClipperSettingsActivity extends AppCompatActivity {
             findPreference("enableNFCAuth").setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    if ( (boolean) newValue == false )
+                    if (!((boolean) newValue))
                     {
                         // delete current hash and encrypted data
 
@@ -169,6 +169,26 @@ public class PGPClipperSettingsActivity extends AppCompatActivity {
                         Intent intent = new Intent(getActivity(), NFCAuthenticationSetupActivity.class);
 
                         startActivityForResult(intent, 7272 );
+                    }
+                    return true;
+                }
+            });
+
+            // For Fingerprint authentication
+
+            findPreference("enableFingerprintAuth").setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    if (!((boolean) newValue))
+                    {
+                        //TODO: Remove password entry from secure storage
+
+                    }
+                    else
+                    {
+                        //TODO: Check fingerprint enrollment
+                        //TODO: Put password into secure storage
+                        //TODO: Setup fingerprint flag
                     }
                     return true;
                 }
