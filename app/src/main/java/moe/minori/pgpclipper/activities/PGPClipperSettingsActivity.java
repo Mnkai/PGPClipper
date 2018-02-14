@@ -3,6 +3,7 @@ package moe.minori.pgpclipper.activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
@@ -176,23 +177,30 @@ public class PGPClipperSettingsActivity extends AppCompatActivity {
 
             // For Fingerprint authentication
 
-            findPreference("enableFingerprintAuth").setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    if (!((boolean) newValue))
-                    {
-                        //TODO: Remove password entry from secure storage
+            CheckBoxPreference fingerprintCheckboxPreference = (CheckBoxPreference) findPreference("enableFingerprintAuth");
 
+            if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.M) // Fingerprint API not supported below M
+                fingerprintCheckboxPreference.setEnabled(false);
+            else
+            {
+                findPreference("enableFingerprintAuth").setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                    @Override
+                    public boolean onPreferenceChange(Preference preference, Object newValue) {
+                        if (!((boolean) newValue))
+                        {
+                            //TODO: Remove password entry from secure storage
+
+                        }
+                        else
+                        {
+                            //TODO: Check fingerprint enrollment
+                            //TODO: Put password into secure storage
+                            //TODO: Setup fingerprint flag
+                        }
+                        return true;
                     }
-                    else
-                    {
-                        //TODO: Check fingerprint enrollment
-                        //TODO: Put password into secure storage
-                        //TODO: Setup fingerprint flag
-                    }
-                    return true;
-                }
-            });
+                });
+            }
         }
 
         @Override
