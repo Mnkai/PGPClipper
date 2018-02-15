@@ -60,7 +60,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="@string/fastReplyText"
-        android:id="@+id/fastReplyIndicator"
+        android:id="@+id/underTextIndicator"
         android:layout_below="@+id/decryptionResultTextScrollWrapper"
         android:layout_centerHorizontal="true"
         android:gravity="center" />

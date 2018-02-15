@@ -28,7 +28,6 @@ import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.crypto.BadPaddingException;
@@ -61,7 +60,7 @@ public class PGPClipperResultShowActivity extends Activity {
     TextView sigStatus;
     TextView decStatus;
     EditText decResult;
-    TextView fastReplyIndc;
+    TextView underTextIndicator;
     ImageView fingerprintHintImageView;
 
     Goldfinger goldfinger;
@@ -98,7 +97,7 @@ public class PGPClipperResultShowActivity extends Activity {
         sigStatus = findViewById(R.id.sigStatusTitle);
         decStatus = findViewById(R.id.decryptionStatusTitle);
         decResult = findViewById(R.id.decryptionResultText);
-        fastReplyIndc = findViewById(R.id.fastReplyIndicator);
+        underTextIndicator = findViewById(R.id.underTextIndicator);
         fingerprintHintImageView = findViewById(R.id.fingerprintHintImageViewResult);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -117,7 +116,7 @@ public class PGPClipperResultShowActivity extends Activity {
 
             if (preferences.getBoolean("enableNFCAuth", false) && adapter.isEnabled()) {
                 waitingNFC = true;
-                fastReplyIndc.setText(R.string.nfcReadyResultShowText);
+                underTextIndicator.setText(R.string.nfcReadyResultShowText);
             }
             if (preferences.getBoolean("enableFingerprintAuth", false))
             {
@@ -197,7 +196,7 @@ public class PGPClipperResultShowActivity extends Activity {
             e.printStackTrace();
         } catch (InvalidKeyException | BadPaddingException e2) {
             // NFC token or PIN was wrong.
-            fastReplyIndc.setText(R.string.credentialWrongText);
+            underTextIndicator.setText(R.string.credentialWrongText);
             pgpKeyPassword = null;
             //enableTagReading(adapter);
 
@@ -263,14 +262,14 @@ public class PGPClipperResultShowActivity extends Activity {
 
                 @Override
                 public void onWarning(Warning warning) {
-                    fastReplyIndc.setText(R.string.credentialWrongText);
+                    underTextIndicator.setText(R.string.credentialWrongText);
                     pgpKeyPassword = null;
                 }
 
                 @Override
                 public void onError(Error error) {
                     fingerprintHintImageView.setVisibility(View.GONE);
-                    fastReplyIndc.setText(R.string.credentialWrongText);
+                    underTextIndicator.setText(R.string.credentialWrongText);
                     pgpKeyPassword = null;
                 }
             });
@@ -418,7 +417,7 @@ public class PGPClipperResultShowActivity extends Activity {
 
                         if (finalResult != null) {
                             decResult.setText(finalResult);
-                            fastReplyIndc.setText(R.string.fastReplyText);
+                            underTextIndicator.setText(R.string.fastReplyText);
                             isReplyable = true;
                         } else
                             decResult.setText(R.string.errorCannotProcess);
