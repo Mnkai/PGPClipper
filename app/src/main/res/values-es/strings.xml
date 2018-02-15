@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+  <string name="enabledService">Activar servicio</string>
+  <string name="enabledServiceSummary">Permitir que PGPClipper se ejecute en segundo plano.
+Nota: La aplicación tendrá acceso a los datos del portapapeles.</string>
+  <string name="pgpServiceProviderAppTitleString">Proveedor de servicio OpenPGP</string>
+  <string name="appVersionTitleString">Versión</string>
+  <string name="licenseTitleString">Licencia</string>
+  <string name="thirdPartyLicenseTitleString">Licencias de terceros</string>
+  <string name="issueTrackingTitleString">Servicio técnico y código fuente</string>
+  <string name="themeStyleText">Tema</string>
+  <string name="enableNFCAuth">Activar autenticación NFC</string>
+  <string name="enableNFCAuthSummary">Permitir la firma digital mediante token NFC.
+Nota:  La aplicación almacenará su contraseña PGP.</string>
+  <string name="credentialWrongText">Credenciales incorrectos, intente de nuevo</string>
+  <string name="nfcAuthenticationSetupWizardTitleText">Configuración de la autenticación NFC</string>
+  <string name="nfcWizard01Text">Este asistente le ayudará a configurar la autenticación NFC.
+Pulse siguiente para continuar.
+Pulse cerrar en cualquier momento para cerrar el asistente.</string>
+  <string name="nfcWizard02Text">Generando sal criptográfica para cifrado.
+Por favor, espere.</string>
+  <string name="nfcWizard03Text">Sal criptográfica generada con éxito.</string>
+  <string name="nfcWizard05PasswordInputText">Introduzca su contraseña PGP</string>
+  <string name="nfcWizard05PasswordReInputText">Reintroduzca su contraseña PGP</string>
+  <string name="nfcWizard06Text">Acerque el token NFC al dispositivo.</string>
+  <string name="nfcWizard07Text">Acerque de nuevo el token NFC al dispositivo.</string>
+  <string name="nfcWizard08Text">Token NFC detectado con éxito.</string>
+  <string name="nfcWizard11Text">Este token NFC no puede ser usado.</string>
+  <string name="closeText">Cerrar</string>
+  <string name="nextText">Siguiente</string>
+</resources>
