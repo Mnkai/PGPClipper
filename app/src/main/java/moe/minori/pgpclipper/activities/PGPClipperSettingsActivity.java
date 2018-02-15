@@ -12,6 +12,7 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import java.security.KeyStore;
@@ -27,12 +28,17 @@ public class PGPClipperSettingsActivity extends Activity {
     SettingFragment fragment;
 
     @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        getFragmentManager().beginTransaction().replace(android.R.id.content, fragment = new SettingFragment()).commit();
+    }
+
+    @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        getFragmentManager().beginTransaction().replace(android.R.id.content, fragment = new SettingFragment()).commit();
 
-
-        fragment.findPreference("enabledCheckBox").setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+        fragment.findPreference("pgpClipperEnabledCheckbox").setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
 
@@ -117,32 +123,32 @@ public class PGPClipperSettingsActivity extends Activity {
             }
         });
 
-        final CheckBoxPreference pgpClipperEnabledChekcbox = (CheckBoxPreference) fragment.findPreference("enabledCheckBox");
+        final CheckBoxPreference pgpClipperEnabledCheckbox = (CheckBoxPreference) fragment.findPreference("pgpClipperEnabledCheckbox");
 
         fragment.findPreference("pgpServiceProviderApp").setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 String providerApp = (String) newValue;
                 if (providerApp == null || "".equals(providerApp)) {
-                    pgpClipperEnabledChekcbox.setEnabled(false);
-                    pgpClipperEnabledChekcbox.setChecked(false);
+                    pgpClipperEnabledCheckbox.setEnabled(false);
+                    pgpClipperEnabledCheckbox.setChecked(false);
                     stopService(new Intent(PGPClipperSettingsActivity.this, PGPClipperService.class));
                 } else {
-                    pgpClipperEnabledChekcbox.setEnabled(true);
+                    pgpClipperEnabledCheckbox.setEnabled(true);
                 }
                 return true;
             }
         });
         String providerApp = sharedPreferences.getString("pgpServiceProviderApp", null);
         if (providerApp == null || "".equals(providerApp)) {
-            pgpClipperEnabledChekcbox.setEnabled(false);
-            pgpClipperEnabledChekcbox.setChecked(false);
+            pgpClipperEnabledCheckbox.setEnabled(false);
+            pgpClipperEnabledCheckbox.setChecked(false);
             stopService(new Intent(PGPClipperSettingsActivity.this, PGPClipperService.class));
         } else {
-            if (pgpClipperEnabledChekcbox.isChecked()) {
+            if (pgpClipperEnabledCheckbox.isChecked()) {
                 startService(new Intent(PGPClipperSettingsActivity.this, PGPClipperService.class));
             }
-            pgpClipperEnabledChekcbox.setEnabled(true);
+            pgpClipperEnabledCheckbox.setEnabled(true);
         }
 
         // for NFC authentication

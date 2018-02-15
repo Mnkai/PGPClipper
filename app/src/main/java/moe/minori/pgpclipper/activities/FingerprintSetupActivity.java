@@ -159,6 +159,9 @@ public class FingerprintSetupActivity extends Activity {
             goldfinger.encrypt(Constants.FINGERPRINT_KEYNAME, password, new Goldfinger.Callback() {
                 @Override
                 public void onSuccess(String value) {
+                    Toast.makeText(FingerprintSetupActivity.this,
+                            R.string.fingerprintCorrectString,
+                            Toast.LENGTH_LONG).show();
                     setResult(RESULT_OK);
                     finish();
                 }
@@ -166,7 +169,7 @@ public class FingerprintSetupActivity extends Activity {
                 @Override
                 public void onWarning(Warning warning) {
                     Toast.makeText(FingerprintSetupActivity.this,
-                            "Could not read fingerprint from sensor, try again.",
+                            R.string.fingerprintErrorString,
                             Toast.LENGTH_LONG)
                             .show();
                 }
@@ -174,7 +177,7 @@ public class FingerprintSetupActivity extends Activity {
                 @Override
                 public void onError(Error error) {
                     Toast.makeText(FingerprintSetupActivity.this,
-                            "Fatal error! Try again later.",
+                            R.string.fingerprintFatalErrorString,
                             Toast.LENGTH_LONG)
                             .show();
 

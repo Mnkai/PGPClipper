@@ -52,4 +52,9 @@
     <string name="fingerprintWizard01Text" >This Wizard will help you setup fingerprint authentication.\n\nPress next to continue.\nPress close to close this wizard at anytime.</string>
     <string name="fingerprintWizard04Text">Locate your device\'s fingerprint sensor, and scan.</string>
     <string name="fingerprintWizard05Text">Nearly done, collecting last bits...</string>
+    <string name="fingerprintCorrectString">Fingerprint is correct, complete!</string>
+    <string name="fingerprintErrorString">Could not read fingerprint from sensor, try again.</string>
+    <string name="fingerprintFatalErrorString">Fatal error! Try again later.</string>
+    <string name="nfcNotAvailableString">NFC hardware not available</string>
+    <string name="nfcDisabledString">Enable NFC in settings</string>
 </resources>
