@@ -60,15 +60,16 @@ public class PGPClipperQuickReplyActivity extends Activity {
     CheckBox sigCheckBox;
     EditText replyTextField;
 
-    TextView nfcSignatureNotice;
-
-    ImageView fingerprintHintImageView;
+    TextView alternativeSignatureNotice;
 
     Goldfinger goldfinger = null;
     NfcAdapter adapter;
     SharedPreferences preferences;
 
     String pgpKeyPassword = null;
+
+    boolean tryNfc = false;
+    boolean tryFingerprint = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,8 +92,7 @@ public class PGPClipperQuickReplyActivity extends Activity {
 
         sigCheckBox = findViewById(R.id.signatureCheck);
         replyTextField = findViewById(R.id.replyText);
-        nfcSignatureNotice = findViewById(R.id.nfcNotificationText);
-        fingerprintHintImageView = findViewById(R.id.fingerprintHintImageViewReply);
+        alternativeSignatureNotice = findViewById(R.id.alternativeNotificationText);
 
         // get nfc adapter
 
@@ -100,20 +100,43 @@ public class PGPClipperQuickReplyActivity extends Activity {
 
         preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-        if (preferences.getBoolean("enableNFCAuth", false) && adapter.isEnabled()) {
-            nfcSignatureNotice.setVisibility(View.VISIBLE);
-
-        } else {
-            nfcSignatureNotice.setVisibility(View.GONE);
-        }
-
-        if (preferences.getBoolean("enableFingerprintAuth", false))
+        if ( preferences.getBoolean("enableNFCAuth", false) && adapter.isEnabled()
+                || preferences.getBoolean("enableFingerprintAuth", false) )
         {
-            fingerprintHintImageView.setVisibility(View.VISIBLE);
+            alternativeSignatureNotice.setVisibility(View.VISIBLE);
+
+            StringBuilder authenticationMethod = new StringBuilder();
+            if (preferences.getBoolean("enableNFCAuth", false) &&
+                    preferences.getBoolean("enableFingerprintAuth", false))
+            {
+                authenticationMethod.append(getString(R.string.alternativeAuthenticationMethodNFCText));
+                authenticationMethod.append(" / ");
+                authenticationMethod.append(getString(R.string.alternativeAuthenticationMethodFingerprintText));
+
+                tryNfc = true;
+                tryFingerprint = true;
+            }
+            else if (preferences.getBoolean("enableNFCAuth", false) &&
+                    !preferences.getBoolean("enableFingerprintAuth", false))
+            {
+                authenticationMethod.append(getString(R.string.alternativeAuthenticationMethodNFCText));
+
+                tryNfc = true;
+            }
+            else if (!preferences.getBoolean("enableNFCAuth", false) &&
+                    preferences.getBoolean("enableFingerprintAuth", false))
+            {
+                authenticationMethod.append(getString(R.string.alternativeAuthenticationMethodFingerprintText));
+
+                tryFingerprint = true;
+            }
+
+            alternativeSignatureNotice.setText(getString(R.string.alternativeReplyNotificationText,
+                    authenticationMethod.toString()));
+
         }
-        else
-        {
-            fingerprintHintImageView.setVisibility(View.GONE);
+        else {
+            alternativeSignatureNotice.setVisibility(View.GONE);
         }
 
         //setting hint if sender's signature key found
@@ -167,11 +190,11 @@ public class PGPClipperQuickReplyActivity extends Activity {
 
         overridePendingTransition(0, 0);
 
-        if (nfcSignatureNotice.getVisibility() == View.VISIBLE) {
+        if (tryNfc) {
             enableTagReading(adapter);
         }
 
-        if (fingerprintHintImageView.getVisibility() == View.VISIBLE)
+        if (tryFingerprint)
         {
             String encryptedPass = preferences.getString("fingerprintEncryptedPass", null);
 
@@ -179,7 +202,7 @@ public class PGPClipperQuickReplyActivity extends Activity {
             goldfinger.decrypt(Constants.FINGERPRINT_KEYNAME, encryptedPass, new Goldfinger.Callback() {
                 @Override
                 public void onSuccess(String value) {
-                    fingerprintHintImageView.setVisibility(View.GONE);
+                    tryFingerprint = false;
                     pgpKeyPassword = value;
                     tryEncryption();
                 }
@@ -191,7 +214,7 @@ public class PGPClipperQuickReplyActivity extends Activity {
 
                 @Override
                 public void onError(Error error) {
-                    fingerprintHintImageView.setVisibility(View.GONE);
+                    tryFingerprint = false;
                 }
             });
         }
@@ -382,7 +405,7 @@ public class PGPClipperQuickReplyActivity extends Activity {
             e.printStackTrace();
         } catch (InvalidKeyException | BadPaddingException e2) {
             // NFC token or PIN was wrong.
-            nfcSignatureNotice.setText(R.string.credentialWrongText);
+            alternativeSignatureNotice.setText(R.string.credentialWrongText);
             pgpKeyPassword = null;
             enableTagReading(adapter);
 

@@ -32,14 +32,14 @@
         android:text="@string/replyText"
         android:id="@+id/executeBtn"
         android:onClick="onClick"
-        android:layout_below="@+id/nfcNotificationText"
+        android:layout_below="@+id/alternativeNotificationText"
         android:layout_centerHorizontal="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/quickReplyNFCNotificationText"
-        android:id="@+id/nfcNotificationText"
+        android:text="@string/alternativeReplyNotificationText"
+        android:id="@+id/alternativeNotificationText"
         android:layout_below="@+id/replyText"
         android:layout_centerHorizontal="true"
         android:gravity="center" />

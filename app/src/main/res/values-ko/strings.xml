@@ -7,11 +7,11 @@
     <string name="licenseTitleString">라이센스</string>
     <string name="pgpServiceProviderAppTitleString">OpenPGP 서비스 제공자 상태</string>
     <string name="thirdPartyLicenseTitleString">서드파티 라이센스</string>
-    <string name="decryptionStatusText">복호화 상태: </string>
+    <string name="decryptionStatusText">복호화 상태: %1$s</string>
     <string name="fastReplyText">결과 필드를 눌러 빠른 답장</string>
     <string name="processingResultText">처리 결과</string>
     <string name="replyText">답장</string>
-    <string name="signatureStatusText">서명 상태: </string>
+    <string name="signatureStatusText">서명 상태: %1$s (%2$s)</string>
     <string name="signatureToggleText">서명 활성화</string>
     <string name="NotificationTickerText">PGP 데이터로 예상되는 내용 감지됨</string>
     <string name="NotificationTitleText">PGP 데이터로 예상되는 내용 감지됨</string>
@@ -27,7 +27,7 @@
     <string name="errorCannotProcess">처리할 수 없음</string>
     <string name="hintRecipient">수신자:</string>
     <string name="nfcAuthenticationSetupWizardTitleText">NFC 인증 설정 마법사</string>
-    <string name="nfcReadyResultShowText">NFC 토큰을 사용해 인증\n결과 필드를 눌러 비밀번호/캐시 사용</string>
+    <string name="alternativeAuthenticationMethodText">%1$s을(를) 사용해 인증\n결과 필드를 눌러 비밀번호/캐시 사용</string>
     <string name="nfcWizard01Text">이 마법사는 NFC 토큰 인증 설정을 도울 것입니다.\n\n다음을 눌러 계속할 수 있습니다.\n언제든지 닫기를 눌러 마법사를 종료할 수 있습니다.</string>
     <string name="nfcWizard02Text">암호화를 위한 솔트 생성 중\n잠시 기다려주세요</string>
     <string name="nfcWizard03Text">PGPClipper가 성공적으로 솔트를 생성했습니다.</string>
@@ -41,7 +41,7 @@
     <string name="nfcWizard12Text">해시를 생성하고 암호화 중…\n이 작업은 장치의 성능에 따라 오래 걸릴 수 있습니다.\n\n작업이 완료될 때 까지 임시로 화면이 꺼지지 않습니다.</string>
     <string name="closeText">닫기</string>
     <string name="nextText">다음</string>
-    <string name="quickReplyNFCNotificationText">NFC 토큰을 대어 메세지를 암호화/사인\n답장 버튼을 눌러 패스워드 입력</string>
+    <string name="alternativeReplyNotificationText">%1$s을(를) 사용해 메세지를 암호화/사인\n답장 버튼을 눌러 패스워드 입력</string>
     <string name="enableFingerprintAuth" >지문 인증 활성화</string>
     <string name="enableFingerprintAuthSummary" >이 옵션을 선택해 PGPClipper가 지문을 사용해 사인을 할 수 있도록 합니다.\n이 기능을 활성화하면 이 애플리케이션은 PGP 암호를 **저장 할 것입니다**.</string>
     <string name="fingerprintSetupWizardTitleText">지문 설정 마법사</string>
@@ -52,4 +52,6 @@
     <string name="fingerprintFatalErrorString">치명적인 문제! 나중에 다시 시도하세요.</string>
     <string name="nfcNotAvailableString">NFC 하드웨어가 존재하지 않습니다</string>
     <string name="nfcDisabledString">설정에서 NFC를 활성화하세요</string>
+    <string name="alternativeAuthenticationMethodFingerprintText">지문 인식 센서</string>
+    <string name="alternativeAuthenticationMethodNFCText">NFC 토큰</string>
 </resources>

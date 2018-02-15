@@ -9,8 +9,8 @@
     <string name="signatureToggleText">Signieren</string>
     <string name="replyText">Antworten</string>
     <string name="processingResultText">Verarbeite Zwischenablage</string>
-    <string name="signatureStatusText">Signaturstatus:</string>
-    <string name="decryptionStatusText">Entschlüssellungsstatus:</string>
+    <string name="signatureStatusText">Signaturstatus: %1$s (%2$s)</string>
+    <string name="decryptionStatusText">Entschlüssellungsstatus: %1$s</string>
     <string name="fastReplyText">Für schnelle Antwort Resultatfeld berühren</string>
     <string name="NotificationTickerText">Mögliche PGP Daten erkannt</string>
     <string name="NotificationTitleText">Mögliche PGP Daten erkannt</string>

@@ -29,6 +29,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.List;
+import java.util.Objects;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -61,7 +62,6 @@ public class PGPClipperResultShowActivity extends Activity {
     TextView decStatus;
     EditText decResult;
     TextView underTextIndicator;
-    ImageView fingerprintHintImageView;
 
     Goldfinger goldfinger;
     NfcAdapter adapter;
@@ -98,10 +98,12 @@ public class PGPClipperResultShowActivity extends Activity {
         decStatus = findViewById(R.id.decryptionStatusTitle);
         decResult = findViewById(R.id.decryptionResultText);
         underTextIndicator = findViewById(R.id.underTextIndicator);
-        fingerprintHintImageView = findViewById(R.id.fingerprintHintImageViewResult);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         adapter = NfcAdapter.getDefaultAdapter(this);
+
+        sigStatus.setText(getString(R.string.signatureStatusText, "", ""));
+        decStatus.setText(getString(R.string.decryptionStatusText, ""));
 
         String currentPgpProvider = preferences.getString("pgpServiceProviderApp", null);
 
@@ -116,16 +118,37 @@ public class PGPClipperResultShowActivity extends Activity {
 
             if (preferences.getBoolean("enableNFCAuth", false) && adapter.isEnabled()) {
                 waitingNFC = true;
-                underTextIndicator.setText(R.string.nfcReadyResultShowText);
             }
             if (preferences.getBoolean("enableFingerprintAuth", false))
             {
                 waitingFingerprint = true;
-                fingerprintHintImageView.setVisibility(View.VISIBLE);
             }
             if (!preferences.getBoolean("enableNFCAuth", false) &&
                     !preferences.getBoolean("enableFingerprintAuth", false)) {
                 tryDecryption();
+            }
+            else
+            {
+                StringBuilder authenticationMethod = new StringBuilder();
+                if (preferences.getBoolean("enableNFCAuth", false) &&
+                        preferences.getBoolean("enableFingerprintAuth", false))
+                {
+                    authenticationMethod.append(getString(R.string.alternativeAuthenticationMethodNFCText));
+                    authenticationMethod.append(" / ");
+                    authenticationMethod.append(getString(R.string.alternativeAuthenticationMethodFingerprintText));
+                }
+                else if (preferences.getBoolean("enableNFCAuth", false) &&
+                        !preferences.getBoolean("enableFingerprintAuth", false))
+                {
+                    authenticationMethod.append(getString(R.string.alternativeAuthenticationMethodNFCText));
+                }
+                else if (!preferences.getBoolean("enableNFCAuth", false) &&
+                        preferences.getBoolean("enableFingerprintAuth", false))
+                {
+                    authenticationMethod.append(getString(R.string.alternativeAuthenticationMethodFingerprintText));
+                }
+
+                underTextIndicator.setText(getString(R.string.alternativeAuthenticationMethodText, authenticationMethod.toString()));
             }
 
         }
@@ -135,7 +158,7 @@ public class PGPClipperResultShowActivity extends Activity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
 
-        if (intent.getAction().equals(NfcAdapter.ACTION_TAG_DISCOVERED)) {
+        if (Objects.equals(intent.getAction(), NfcAdapter.ACTION_TAG_DISCOVERED)) {
             final Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
 
             tryNfcDecryption(NFCEncryptionUtils.byteArrayToHex(tag.getId()));
@@ -254,7 +277,6 @@ public class PGPClipperResultShowActivity extends Activity {
             goldfinger.decrypt(Constants.FINGERPRINT_KEYNAME, fingerprintEncryptedPassword, new Goldfinger.Callback() {
                 @Override
                 public void onSuccess(String value) {
-                    fingerprintHintImageView.setVisibility(View.GONE);
                     waitingFingerprint = false;
                     pgpKeyPassword = value;
                     tryDecryption();
@@ -268,7 +290,6 @@ public class PGPClipperResultShowActivity extends Activity {
 
                 @Override
                 public void onError(Error error) {
-                    fingerprintHintImageView.setVisibility(View.GONE);
                     underTextIndicator.setText(R.string.credentialWrongText);
                     pgpKeyPassword = null;
                 }
@@ -361,23 +382,16 @@ public class PGPClipperResultShowActivity extends Activity {
 
     private String[] convertToStringArray(List<String> input) throws StringIndexOutOfBoundsException {
 
-        try
-        {
-            String[] toReturn = new String[input.size()];
+        String[] toReturn = new String[input.size()];
 
-            for (int i = 0; i < input.size(); i++) {
-                int startIdx = input.get(i).lastIndexOf("<");
-                int endIdx = input.get(i).lastIndexOf(">");
+        for (int i = 0; i < input.size(); i++) {
+            int startIdx = input.get(i).lastIndexOf("<");
+            int endIdx = input.get(i).lastIndexOf(">");
 
-                toReturn[i] = input.get(i).substring(startIdx + 1, endIdx);
-            }
-
-            return toReturn;
+            toReturn[i] = input.get(i).substring(startIdx + 1, endIdx);
         }
-        catch (StringIndexOutOfBoundsException e)
-        {
-            throw e;
-        }
+
+        return toReturn;
 
     }
 
@@ -402,17 +416,17 @@ public class PGPClipperResultShowActivity extends Activity {
                         OpenPgpDecryptionResult decryptionResult = result.getParcelableExtra(OpenPgpApi.RESULT_DECRYPTION);
 
                         if (signatureResult.getResult() == 1) {
-                            sigStatus.setText(getString(R.string.signatureStatusText) + "O \n(" + signatureResult.getPrimaryUserId() + ")");
+                            sigStatus.setText(getString(R.string.signatureStatusText, "O", signatureResult.getPrimaryUserId()));
                             KEY_ID = signatureResult.getUserIds();
                         } else {
-                            sigStatus.setText(getString(R.string.signatureStatusText) + "X");
+                            sigStatus.setText(getString(R.string.signatureStatusText, "X", ""));
                         }
 
 
                         if (decryptionResult.getResult() == 1) {
-                            decStatus.setText(getString(R.string.decryptionStatusText) + "O");
+                            decStatus.setText(getString(R.string.decryptionStatusText, "O"));
                         } else {
-                            decStatus.setText(getString(R.string.decryptionStatusText) + "X");
+                            decStatus.setText(getString(R.string.decryptionStatusText, "X"));
                         }
 
                         if (finalResult != null) {
@@ -443,8 +457,8 @@ public class PGPClipperResultShowActivity extends Activity {
                 case OpenPgpApi.RESULT_CODE_ERROR: {
                     //TODO: Show user error dialog
 
-                    sigStatus.setText(getString(R.string.signatureStatusText) + "X");
-                    decStatus.setText(getString(R.string.decryptionStatusText) + "X");
+                    sigStatus.setText(getString(R.string.signatureStatusText, "X", ""));
+                    decStatus.setText(getString(R.string.decryptionStatusText, "X"));
                     decResult.setText(R.string.errorCannotProcess);
 
                     break;

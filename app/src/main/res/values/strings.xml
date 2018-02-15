@@ -14,8 +14,8 @@
     <string name="signatureToggleText">Signature Toggle</string>
     <string name="replyText">Reply</string>
     <string name="processingResultText">Processing Result</string>
-    <string name="signatureStatusText">Signature Status:</string>
-    <string name="decryptionStatusText">Decryption Status:</string>
+    <string name="signatureStatusText">Signature Status: %1$s (%2$s)</string>
+    <string name="decryptionStatusText">Decryption Status: %1$s</string>
     <string name="fastReplyText">Press result field for fast reply</string>
     <string name="tryAgainText">To try again, Press result field.</string>
     <string name="NotificationTickerText">Possible PGP Data Detected</string>
@@ -30,7 +30,7 @@
     <string name="enableNFCAuth">Enable NFC Authentication</string>
     <string name="enableNFCAuthSummary">Check this box to allow PGPClipper perform signature with NFC token.\nNote that this application *will* store your PGP password if you enable this function.</string>
     <string name="credentialWrongText">Credential was wrong, try again</string>
-    <string name="nfcReadyResultShowText">Tap NFC token to authenticate\nPress result field for password/stored credential failback</string>
+    <string name="alternativeAuthenticationMethodText">%1$s to authenticate\nPress result field for password/stored credential fallback</string>
     <string name="nfcAuthenticationSetupWizardTitleText">NFC Authentication Setup Wizard</string>
     <string name="nfcWizard01Text">This Wizard will help you setup NFC token authentication.\n\nPress next to continue.\nPress close to close this wizard at anytime.</string>
     <string name="nfcWizard02Text">Generating salt value for encryption.\nPlease wait.</string>
@@ -45,7 +45,7 @@
     <string name="nfcWizard12Text">Generating hash and encrypting…\nThis might take a long time (few minutes)\ndepending on your device\'s power.\n\nScreen will stay on.</string>
     <string name="closeText">Close</string>
     <string name="nextText">Next</string>
-    <string name="quickReplyNFCNotificationText">Tap NFC token to sign and encrypt message\nPress reply for password fallback</string>
+    <string name="alternativeReplyNotificationText">%1$s to sign and encrypt message\nPress reply for password fallback</string>
     <string name="enableFingerprintAuth">Enable Fingerprint Authentication</string>
     <string name="enableFingerprintAuthSummary">Check this box to allow PGPClipper perform signature with fingerprint.\nNote that this application *will* store your PGP password if you enable this function.</string>
     <string name="fingerprintSetupWizardTitleText" >Fingerprint Setup Wizard</string>
@@ -56,4 +56,6 @@
     <string name="fingerprintFatalErrorString">Fatal error! Try again later.</string>
     <string name="nfcNotAvailableString">NFC hardware not available</string>
     <string name="nfcDisabledString">Enable NFC in settings</string>
+    <string name="alternativeAuthenticationMethodNFCText">Tap NFC token</string>
+    <string name="alternativeAuthenticationMethodFingerprintText">Touch fingerprint scanner</string>
 </resources>

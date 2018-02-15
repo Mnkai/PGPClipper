@@ -10,8 +10,8 @@
   <string name="signatureToggleText">Andere handtekening</string>
   <string name="replyText">Antwoorden</string>
   <string name="processingResultText">Verwerkingsresultaat</string>
-  <string name="signatureStatusText">Handtekening Status:</string>
-  <string name="decryptionStatusText">Ontsleuteling Status:</string>
+  <string name="signatureStatusText">Handtekening Status: %1$s (%2$s)</string>
+  <string name="decryptionStatusText">Ontsleuteling Status: %1$s</string>
   <string name="fastReplyText">Druk op resultaat veld voor snel antwoorden</string>
   <string name="tryAgainText">Druk op het resultaat veld op opnieuw te proberen.</string>
   <string name="NotificationTickerText">Mogelijke PGP gegevens ontdekt</string>
@@ -26,7 +26,7 @@
   <string name="enableNFCAuth">NFC authenticatie inschakelen</string>
   <string name="enableNFCAuthSummary">Vink deze checkbox aan om PGPClipper toe staan een handtekening met het NFC token te maken.\nOm deze functie in te schakelen slaat deze applicatie je PGP wachtwoord op.</string>
   <string name="credentialWrongText">Gebruikersnaam/wachtwoord onjuist. Probeer opnieuw</string>
-  <string name="nfcReadyResultShowText">Tik op NFC token om te authenticeren\nDruk op resultaat veld om terug te vallen op wachtwoord</string>
+  <string name="alternativeAuthenticationMethodText">%1$s om te authenticeren\\nDruk op resultaat veld om terug te vallen op wachtwoord</string>
   <string name="nfcAuthenticationSetupWizardTitleText">NFC authenticatie setup wizard</string>
   <string name="nfcWizard01Text">Deze wizard helpt je met NFC authenticatie.\n\nDruk volgende om door te gaan.\nDruk ieder moment op sluiten om deze wizard te sluiten.</string>
   <string name="nfcWizard02Text">Bezig met genereren van salt-waarde voor versleuteling.\nEven geduld.</string>
@@ -41,5 +41,5 @@
   <string name="nfcWizard12Text">Genereren van hash en bezig met versleutelen...\nDit kan lang duren (enkele minuten)\nafhankelijk van de snelheid van je apparaat.\n\nHet beeldscherm blijft aan.</string>
   <string name="closeText">Sluiten</string>
   <string name="nextText">Volgende</string>
-  <string name="quickReplyNFCNotificationText">Tik op NFC token om boodschap te ondertekenen en te versleutelen\nDruk op antwoorden om terug te vallen op het wachtwoord</string>
+  <string name="alternativeReplyNotificationText">%1$s om boodschap te ondertekenen en te versleutelen Druk op antwoorden om terug te vallen op het wachtwoord</string>
 </resources>
