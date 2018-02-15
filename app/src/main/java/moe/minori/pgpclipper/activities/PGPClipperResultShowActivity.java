@@ -64,6 +64,7 @@ public class PGPClipperResultShowActivity extends Activity {
     TextView fastReplyIndc;
     ImageView fingerprintHintImageView;
 
+    Goldfinger goldfinger;
     NfcAdapter adapter;
     SharedPreferences preferences;
 
@@ -72,6 +73,7 @@ public class PGPClipperResultShowActivity extends Activity {
     boolean isReplyable = false;
 
     boolean waitingNFC = false;
+    boolean waitingFingerprint = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,32 +121,8 @@ public class PGPClipperResultShowActivity extends Activity {
             }
             if (preferences.getBoolean("enableFingerprintAuth", false))
             {
+                waitingFingerprint = true;
                 fingerprintHintImageView.setVisibility(View.VISIBLE);
-
-                //TODO: Check string usage
-                String fingerprintEncryptedPassword = preferences.getString("fingerprintEncryptedPass", null);
-                Goldfinger goldfinger = new Goldfinger.Builder(PGPClipperResultShowActivity.this).build();
-                goldfinger.decrypt(Constants.FINGERPRINT_KEYNAME, fingerprintEncryptedPassword, new Goldfinger.Callback() {
-                    @Override
-                    public void onSuccess(String value) {
-                        fingerprintHintImageView.setVisibility(View.GONE);
-                        pgpKeyPassword = value;
-                        tryDecryption();
-                    }
-
-                    @Override
-                    public void onWarning(Warning warning) {
-                        fastReplyIndc.setText(R.string.credentialWrongText);
-                        pgpKeyPassword = null;
-                    }
-
-                    @Override
-                    public void onError(Error error) {
-                        fingerprintHintImageView.setVisibility(View.GONE);
-                        fastReplyIndc.setText(R.string.credentialWrongText);
-                        pgpKeyPassword = null;
-                    }
-                });
             }
             if (!preferences.getBoolean("enableNFCAuth", false) &&
                     !preferences.getBoolean("enableFingerprintAuth", false)) {
@@ -253,6 +231,9 @@ public class PGPClipperResultShowActivity extends Activity {
         super.onPause();
 
         disableTagReading(adapter);
+
+        if ( goldfinger != null )
+            goldfinger.cancel();
     }
 
     @Override
@@ -265,6 +246,34 @@ public class PGPClipperResultShowActivity extends Activity {
             // start adapter listening
 
             enableTagReading(adapter);
+        }
+
+        if ( waitingFingerprint )
+        {
+            String fingerprintEncryptedPassword = preferences.getString("fingerprintEncryptedPass", null);
+            goldfinger = new Goldfinger.Builder(PGPClipperResultShowActivity.this).build();
+            goldfinger.decrypt(Constants.FINGERPRINT_KEYNAME, fingerprintEncryptedPassword, new Goldfinger.Callback() {
+                @Override
+                public void onSuccess(String value) {
+                    fingerprintHintImageView.setVisibility(View.GONE);
+                    waitingFingerprint = false;
+                    pgpKeyPassword = value;
+                    tryDecryption();
+                }
+
+                @Override
+                public void onWarning(Warning warning) {
+                    fastReplyIndc.setText(R.string.credentialWrongText);
+                    pgpKeyPassword = null;
+                }
+
+                @Override
+                public void onError(Error error) {
+                    fingerprintHintImageView.setVisibility(View.GONE);
+                    fastReplyIndc.setText(R.string.credentialWrongText);
+                    pgpKeyPassword = null;
+                }
+            });
         }
 
     }

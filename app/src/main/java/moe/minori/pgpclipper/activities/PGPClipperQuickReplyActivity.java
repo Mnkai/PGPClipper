@@ -64,6 +64,7 @@ public class PGPClipperQuickReplyActivity extends Activity {
 
     ImageView fingerprintHintImageView;
 
+    Goldfinger goldfinger = null;
     NfcAdapter adapter;
     SharedPreferences preferences;
 
@@ -174,7 +175,7 @@ public class PGPClipperQuickReplyActivity extends Activity {
         {
             String encryptedPass = preferences.getString("fingerprintEncryptedPass", null);
 
-            Goldfinger goldfinger = new Goldfinger.Builder(PGPClipperQuickReplyActivity.this).build();
+            goldfinger = new Goldfinger.Builder(PGPClipperQuickReplyActivity.this).build();
             goldfinger.decrypt(Constants.FINGERPRINT_KEYNAME, encryptedPass, new Goldfinger.Callback() {
                 @Override
                 public void onSuccess(String value) {
@@ -194,6 +195,14 @@ public class PGPClipperQuickReplyActivity extends Activity {
                 }
             });
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if (goldfinger != null)
+            goldfinger.cancel();
     }
 
     @Override

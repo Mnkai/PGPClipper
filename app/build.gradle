@@ -18,6 +18,9 @@ android {
     }
     productFlavors {
     }
+    lintOptions {
+        checkReleaseBuilds false
+    }
 }
 
 dependencies {

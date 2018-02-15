@@ -34,7 +34,7 @@ public class FingerprintSetupActivity extends Activity {
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
 
-    Goldfinger goldfinger;
+    Goldfinger goldfinger = null;
     RelativeLayout parent;
 
     @Override
