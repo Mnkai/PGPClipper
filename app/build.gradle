@@ -6,7 +6,7 @@ android {
     defaultConfig {
         applicationId "moe.minori.pgpclipper"
         minSdkVersion 21
-        targetSdkVersion 27
+        targetSdkVersion 25
         versionCode 5
         versionName "0.21"
     }
