@@ -1,11 +1,16 @@
 # PGPClipper
-PGPClipper for Android repository
+
+Use PGPClipper to easily and safely write and receive PGP messages in apps that let you copy and paste text.
+
+PGPClipper monitors user clipboard, and notifies the user when possible PGP data is available for decoding. You can also use NFC token or fingerprint (key password must be stored in app for this function) to decrypt/sign/encrypt texts.
+
 
 # Build
 Build using Android Studio. Or visit F-Droid for prebuilt release.
 
 # Contribution
 You can help translating this app in different languages. Visit https://www.transifex.com/mnetwork/pgpclipper/ for Transifex translation dashboard.
+For other improvements, please use PRs and issues.
 
 # F-Droid
 https://f-droid.org/repository/browse/?fdfilter=pgpclipper&fdid=moe.minori.pgpclipper
@@ -23,6 +28,3 @@ Apache License 2.0, see LICENSE for more details and full license.
 
 # Contributers
 Look at contributers tab in repository information. For translation contributers, visit https://www.transifex.com/mnetwork/teams/55577/
-
-# I guess you are lazy.
-Yes, I am. Check out release pane or Google Play Store link for more information.
