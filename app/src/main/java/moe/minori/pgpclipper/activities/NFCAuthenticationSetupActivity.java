@@ -30,7 +30,7 @@ import javax.crypto.NoSuchPaddingException;
 import moe.minori.pgpclipper.R;
 import moe.minori.pgpclipper.encryption.AESHelper;
 import moe.minori.pgpclipper.encryption.PBKDF2Helper;
-import moe.minori.pgpclipper.util.EncryptionUtils;
+import moe.minori.pgpclipper.util.NFCEncryptionUtils;
 
 /**
  * Created by Minori on 2015-10-18.
@@ -59,7 +59,7 @@ public class NFCAuthenticationSetupActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.nfcauthlayout);
+        setContentView(R.layout.wizardlayout);
 
         parent = (RelativeLayout) findViewById(R.id.parent);
         screen = (RelativeLayout) findViewById(R.id.setupScreen);
@@ -185,7 +185,7 @@ public class NFCAuthenticationSetupActivity extends Activity {
                 // turn off reading mode
                 //disableTagReading(nfcAdapter);
 
-                if (EncryptionUtils.byteArrayToHex(nfcTagUUID).equals(EncryptionUtils.byteArrayToHex(tag.getId()))) {
+                if (NFCEncryptionUtils.byteArrayToHex(nfcTagUUID).equals(NFCEncryptionUtils.byteArrayToHex(tag.getId()))) {
                     // OK, can use this tag. goto next stage.
 
                     goNextStage();
@@ -379,9 +379,9 @@ public class NFCAuthenticationSetupActivity extends Activity {
         try {
             // based on input, write to sharedPref
 
-            editor.putString("deviceSalt", EncryptionUtils.byteArrayToHex(salt));
+            editor.putString("deviceSalt", NFCEncryptionUtils.byteArrayToHex(salt));
 
-            String nfcTagUUIDHex = EncryptionUtils.byteArrayToHex(nfcTagUUID);
+            String nfcTagUUIDHex = NFCEncryptionUtils.byteArrayToHex(nfcTagUUID);
 
             byte[] aesPassword;
 
@@ -389,9 +389,9 @@ public class NFCAuthenticationSetupActivity extends Activity {
 
             byte[] encryptedData;
 
-            encryptedData = AESHelper.encrypt(EncryptionUtils.stringToByteArray(toProtect), aesPassword);
+            encryptedData = AESHelper.encrypt(NFCEncryptionUtils.stringToByteArray(toProtect), aesPassword);
 
-            editor.putString("encryptedKeyPass", EncryptionUtils.byteArrayToHex(encryptedData));
+            editor.putString("encryptedKeyPass", NFCEncryptionUtils.byteArrayToHex(encryptedData));
 
         } catch (NoSuchPaddingException | NoSuchAlgorithmException | BadPaddingException | IllegalBlockSizeException | InvalidKeyException | InvalidKeySpecException e) {
             return false;

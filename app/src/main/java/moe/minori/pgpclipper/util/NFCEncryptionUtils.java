@@ -3,7 +3,7 @@ package moe.minori.pgpclipper.util;
 /**
  * Created by Minori on 2015-10-18.
  */
-public class EncryptionUtils {
+public class NFCEncryptionUtils {
 
     public static String byteArrayToHex (byte[] input)
     {

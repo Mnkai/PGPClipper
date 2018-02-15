@@ -31,7 +31,7 @@
   <string name="nfcWizard01Text">Deze wizard helpt je met NFC authenticatie.\n\nDruk volgende om door te gaan.\nDruk ieder moment op sluiten om deze wizard te sluiten.</string>
   <string name="nfcWizard02Text">Bezig met genereren van salt-waarde voor versleuteling.\nEven geduld.</string>
   <string name="nfcWizard03Text">PGPClipper heeft met success een salt-waarde gegenereerd.</string>
-  <string name="nfcWizard04Text">Geef het wachtwoord op van je standaard sleutel.\nDeze informatie wordt versleuteld.</string>
+  <string name="nfcWizard04fingerprintWizard02Text">Geef het wachtwoord op van je standaard sleutel.\nDeze informatie wordt versleuteld.</string>
   <string name="nfcWizard05PasswordInputText">Voer PGP wachtwoord in</string>
   <string name="nfcWizard05PasswordReInputText">Voer PGP wachtwoord nogmaals in</string>
   <string name="nfcWizard06Text">Tik op NFC token van je apparaat.</string>

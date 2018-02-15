@@ -35,7 +35,7 @@
     <string name="nfcWizard01Text">This Wizard will help you setup NFC token authentication.\n\nPress next to continue.\nPress close to close this wizard at anytime.</string>
     <string name="nfcWizard02Text">Generating salt value for encryption.\nPlease wait.</string>
     <string name="nfcWizard03Text">PGPClipper has successfully generated salt.</string>
-    <string name="nfcWizard04Text">Now you will provide your default key\'s password.\nThis information will be encrypted.</string>
+    <string name="nfcWizard04fingerprintWizard02Text">Now you will provide your default key\'s password.\nThis information will be encrypted.</string>
     <string name="nfcWizard05PasswordInputText">Enter PGP password</string>
     <string name="nfcWizard05PasswordReInputText">Enter PGP password again</string>
     <string name="nfcWizard06Text">Tap NFC token to your device.</string>
@@ -48,4 +48,8 @@
     <string name="quickReplyNFCNotificationText">Tap NFC token to sign and encrypt message\nPress reply for password fallback</string>
     <string name="enableFingerprintAuth">Enable Fingerprint Authentication</string>
     <string name="enableFingerprintAuthSummary">Check this box to allow PGPClipper perform signature with fingerprint.\nNote that this application *will* store your PGP password if you enable this function.</string>
+    <string name="fingerprintSetupWizardTitleText" >Fingerprint Setup Wizard</string>
+    <string name="fingerprintWizard01Text" >This Wizard will help you setup fingerprint authentication.\n\nPress next to continue.\nPress close to close this wizard at anytime.</string>
+    <string name="fingerprintWizard04Text">Locate your device\'s fingerprint sensor, and scan.</string>
+    <string name="fingerprintWizard05Text">Nearly done, collecting last bits...</string>
 </resources>

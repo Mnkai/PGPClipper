@@ -36,7 +36,7 @@ import javax.crypto.NoSuchPaddingException;
 import moe.minori.pgpclipper.R;
 import moe.minori.pgpclipper.encryption.AESHelper;
 import moe.minori.pgpclipper.encryption.PBKDF2Helper;
-import moe.minori.pgpclipper.util.EncryptionUtils;
+import moe.minori.pgpclipper.util.NFCEncryptionUtils;
 
 /**
  * Created by Minori on 2015-09-26.
@@ -123,7 +123,7 @@ public class PGPClipperResultShowActivity extends Activity {
         if (intent.getAction().equals(NfcAdapter.ACTION_TAG_DISCOVERED)) {
             final Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
 
-            tryNfcDecryption(EncryptionUtils.byteArrayToHex(tag.getId()));
+            tryNfcDecryption(NFCEncryptionUtils.byteArrayToHex(tag.getId()));
             waitingNFC = false;
             disableTagReading(adapter);
         }
@@ -151,7 +151,7 @@ public class PGPClipperResultShowActivity extends Activity {
 
         try {
             // get device salt
-            byte[] salt = EncryptionUtils.hexToByteArray(preferences.getString("deviceSalt", null));
+            byte[] salt = NFCEncryptionUtils.hexToByteArray(preferences.getString("deviceSalt", null));
 
             if (salt == null) {
                 throw new Exception("System does not have salt value, but wizard has somehow finished");
@@ -163,7 +163,7 @@ public class PGPClipperResultShowActivity extends Activity {
             aesPassword = PBKDF2Helper.createSaltedHash(nfcUUID, salt);
 
             // aes password generated, try decryption
-            byte[] encryptedData = EncryptionUtils.hexToByteArray(preferences.getString("encryptedKeyPass", null));
+            byte[] encryptedData = NFCEncryptionUtils.hexToByteArray(preferences.getString("encryptedKeyPass", null));
             if (encryptedData == null)
                 throw new Exception("System does not have encrypted password, but wizard has somehow finished");
 
@@ -171,7 +171,7 @@ public class PGPClipperResultShowActivity extends Activity {
 
             decryptedData = AESHelper.decrypt(encryptedData, aesPassword);
 
-            pgpKeyPassword = EncryptionUtils.byteArrayToString(decryptedData);
+            pgpKeyPassword = NFCEncryptionUtils.byteArrayToString(decryptedData);
 
             //attemptPseudoEncryptionApiAccess();
 
