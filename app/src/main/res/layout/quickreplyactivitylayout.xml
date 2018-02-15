@@ -24,7 +24,7 @@
         android:layout_below="@+id/signatureCheck"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:inputType="text" />
+        android:inputType="textMultiLine" />
 
     <Button
         android:layout_width="wrap_content"
