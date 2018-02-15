@@ -18,6 +18,7 @@ import co.infinum.goldfinger.Goldfinger;
 import co.infinum.goldfinger.Warning;
 import moe.minori.pgpclipper.R;
 import moe.minori.pgpclipper.util.Constants;
+import moe.minori.pgpclipper.util.NFCEncryptionUtils;
 
 /**
  * Created by Minori on 2018-02-15.
@@ -159,6 +160,9 @@ public class FingerprintSetupActivity extends Activity {
             goldfinger.encrypt(Constants.FINGERPRINT_KEYNAME, password, new Goldfinger.Callback() {
                 @Override
                 public void onSuccess(String value) {
+                    editor.putString("fingerprintEncryptedPass", value);
+                    editor.commit();
+
                     Toast.makeText(FingerprintSetupActivity.this,
                             R.string.fingerprintCorrectString,
                             Toast.LENGTH_LONG).show();

@@ -1,10 +1,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="wrap_content"
     android:layout_height="wrap_content" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context=".PGPClipperResultShowActivity">
+    tools:context=".activities.PGPClipperResultShowActivity">
 
 
     <TextView
@@ -13,7 +14,6 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/processingResultText"
         android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:id="@+id/processingResultTitle" />
 
@@ -24,9 +24,7 @@
         android:text="@string/signatureStatusText"
         android:id="@+id/sigStatusTitle"
         android:layout_below="@+id/processingResultTitle"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
     <TextView
@@ -36,9 +34,7 @@
         android:text="@string/decryptionStatusText"
         android:id="@+id/decryptionStatusTitle"
         android:layout_below="@+id/sigStatusTitle"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
     <ScrollView
@@ -46,9 +42,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/decryptionStatusTitle"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/decryptionStatusTitle"
         android:layout_alignEnd="@+id/decryptionStatusTitle" >
         <EditText
             android:layout_width="fill_parent"
@@ -70,4 +64,14 @@
         android:layout_below="@+id/decryptionResultTextScrollWrapper"
         android:layout_centerHorizontal="true"
         android:gravity="center" />
+
+    <ImageView
+        android:id="@+id/fingerprintHintImageViewResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:src="?android:attr/fingerprintAuthDrawable"
+        android:visibility="gone"
+        tools:targetApi="m" />
 </RelativeLayout>

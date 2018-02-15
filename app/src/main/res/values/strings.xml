@@ -8,7 +8,7 @@
     <string name="licenseTitleString">License</string>
     <string name="licenseContentString" translatable="false">Apache License 2.0</string>
     <string name="thirdPartyLicenseTitleString">Third Party License</string>
-    <string name="thirdPartyLibraryContentString" translatable="false">OpenPGP API Library - Apache License 2.0</string>
+    <string name="thirdPartyLibraryContentString" translatable="false">OpenPGP API Library - Apache License 2.0\nGoldfinger - Apache License 2.0</string>
     <string name="issueTrackingTitleString">Issue tracking and source code</string>
     <string name="issueTrackingContentString" translatable="false">GitHub</string>
     <string name="signatureToggleText">Signature Toggle</string>
@@ -51,7 +51,6 @@
     <string name="fingerprintSetupWizardTitleText" >Fingerprint Setup Wizard</string>
     <string name="fingerprintWizard01Text" >This Wizard will help you setup fingerprint authentication.\n\nPress next to continue.\nPress close to close this wizard at anytime.</string>
     <string name="fingerprintWizard04Text">Locate your device\'s fingerprint sensor, and scan.</string>
-    <string name="fingerprintWizard05Text">Nearly done, collecting last bits...</string>
     <string name="fingerprintCorrectString">Fingerprint is correct, complete!</string>
     <string name="fingerprintErrorString">Could not read fingerprint from sensor, try again.</string>
     <string name="fingerprintFatalErrorString">Fatal error! Try again later.</string>

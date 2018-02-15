@@ -44,4 +44,12 @@
     <string name="quickReplyNFCNotificationText">NFC 토큰을 대어 메세지를 암호화/사인\n답장 버튼을 눌러 패스워드 입력</string>
     <string name="enableFingerprintAuth" >지문 인증 활성화</string>
     <string name="enableFingerprintAuthSummary" >이 옵션을 선택해 PGPClipper가 지문을 사용해 사인을 할 수 있도록 합니다.\n이 기능을 활성화하면 이 애플리케이션은 PGP 암호를 **저장 할 것입니다**.</string>
+    <string name="fingerprintSetupWizardTitleText">지문 설정 마법사</string>
+    <string name="fingerprintWizard01Text" >이 마법사는 지문 설정을 도울것입니다.\n\n다음을 눌러 계속할 수 있습니다.\n언제라도 닫기를 눌러 마법사를 종료할 수 있습니다..</string>
+    <string name="fingerprintWizard04Text">장치의 지문 인식 센서를 찾아서 스캔하세요.</string>
+    <string name="fingerprintCorrectString">지문이 맞습니다, 완료되었습니다!</string>
+    <string name="fingerprintErrorString">센서에서 지문을 읽을 수 없습니다, 다시 시도하세요.</string>
+    <string name="fingerprintFatalErrorString">치명적인 문제! 나중에 다시 시도하세요.</string>
+    <string name="nfcNotAvailableString">NFC 하드웨어가 존재하지 않습니다</string>
+    <string name="nfcDisabledString">설정에서 NFC를 활성화하세요</string>
 </resources>

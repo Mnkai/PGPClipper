@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.openintents.openpgp.util.OpenPgpApi;
@@ -33,9 +34,13 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
+import co.infinum.goldfinger.Error;
+import co.infinum.goldfinger.Goldfinger;
+import co.infinum.goldfinger.Warning;
 import moe.minori.pgpclipper.R;
 import moe.minori.pgpclipper.encryption.AESHelper;
 import moe.minori.pgpclipper.encryption.PBKDF2Helper;
+import moe.minori.pgpclipper.util.Constants;
 import moe.minori.pgpclipper.util.NFCEncryptionUtils;
 
 /**
@@ -56,6 +61,8 @@ public class PGPClipperQuickReplyActivity extends Activity {
     EditText replyTextField;
 
     TextView nfcSignatureNotice;
+
+    ImageView fingerprintHintImageView;
 
     NfcAdapter adapter;
     SharedPreferences preferences;
@@ -81,9 +88,10 @@ public class PGPClipperQuickReplyActivity extends Activity {
 
         setContentView(R.layout.quickreplyactivitylayout);
 
-        sigCheckBox = (CheckBox) findViewById(R.id.signatureCheck);
-        replyTextField = (EditText) findViewById(R.id.replyText);
-        nfcSignatureNotice = (TextView) findViewById(R.id.nfcNotificationText);
+        sigCheckBox = findViewById(R.id.signatureCheck);
+        replyTextField = findViewById(R.id.replyText);
+        nfcSignatureNotice = findViewById(R.id.nfcNotificationText);
+        fingerprintHintImageView = findViewById(R.id.fingerprintHintImageViewReply);
 
         // get nfc adapter
 
@@ -96,6 +104,15 @@ public class PGPClipperQuickReplyActivity extends Activity {
 
         } else {
             nfcSignatureNotice.setVisibility(View.GONE);
+        }
+
+        if (preferences.getBoolean("enableFingerprintAuth", false))
+        {
+            fingerprintHintImageView.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            fingerprintHintImageView.setVisibility(View.GONE);
         }
 
         //setting hint if sender's signature key found
@@ -151,6 +168,31 @@ public class PGPClipperQuickReplyActivity extends Activity {
 
         if (nfcSignatureNotice.getVisibility() == View.VISIBLE) {
             enableTagReading(adapter);
+        }
+
+        if (fingerprintHintImageView.getVisibility() == View.VISIBLE)
+        {
+            String encryptedPass = preferences.getString("fingerprintEncryptedPass", null);
+
+            Goldfinger goldfinger = new Goldfinger.Builder(PGPClipperQuickReplyActivity.this).build();
+            goldfinger.decrypt(Constants.FINGERPRINT_KEYNAME, encryptedPass, new Goldfinger.Callback() {
+                @Override
+                public void onSuccess(String value) {
+                    fingerprintHintImageView.setVisibility(View.GONE);
+                    pgpKeyPassword = value;
+                    tryEncryption();
+                }
+
+                @Override
+                public void onWarning(Warning warning) {
+
+                }
+
+                @Override
+                public void onError(Error error) {
+                    fingerprintHintImageView.setVisibility(View.GONE);
+                }
+            });
         }
     }
 
