@@ -15,9 +15,6 @@ For other improvements, please use PRs and issues.
 ## F-Droid
 https://f-droid.org/repository/browse/?fdfilter=pgpclipper&fdid=moe.minori.pgpclipper
 
-## Google Play Store
-https://play.google.com/store/apps/details?id=moe.minori.pgpclipper
-
 ## Third Party Licenses
 OpenPGP API Library, Apache License 2.0
 
