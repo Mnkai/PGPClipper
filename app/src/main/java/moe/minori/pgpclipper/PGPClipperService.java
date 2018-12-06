@@ -8,10 +8,9 @@ import android.content.ClipDescription;
 import android.content.ClipboardManager;
 import android.content.Intent;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import androidx.core.app.NotificationCompat;
 import moe.minori.pgpclipper.activities.PGPClipperResultShowActivity;
 import moe.minori.pgpclipper.util.PGPBlockDetector;
 
@@ -27,7 +26,6 @@ public class PGPClipperService extends Service {
     public static final String TRY_DECRYPT = "TRY_DECRYPT";
     public static final String DATA = "DATA";
 
-    @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         return null;

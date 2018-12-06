@@ -12,12 +12,12 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 
+import androidx.annotation.Nullable;
 import co.infinum.goldfinger.Goldfinger;
 import moe.minori.pgpclipper.PGPClipperService;
 import moe.minori.pgpclipper.R;
