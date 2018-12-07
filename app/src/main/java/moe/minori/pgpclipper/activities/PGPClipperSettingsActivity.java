@@ -1,17 +1,21 @@
 package moe.minori.pgpclipper.activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -192,6 +196,23 @@ public class PGPClipperSettingsActivity extends Activity {
         fragment.findPreference("pgpServiceProviderApp").setOnPreferenceChangeListener(pgpServiceProviderAppListener);
         fragment.findPreference("enableNFCAuth").setOnPreferenceChangeListener(NFCAuthPrefListener);
         fragment.findPreference("enableFingerprintAuth").setOnPreferenceChangeListener(fingerprintAuthPrefListener);
+
+        // From M, PGPClipper requires opting out from battery optimisation for background clipboard monitoring
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+            String PACKAGE_NAME = getApplicationContext().getPackageName();
+
+            if (!pm.isIgnoringBatteryOptimizations(PACKAGE_NAME))
+            {
+                Intent intent = new Intent();
+                intent.setAction(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
+                startActivity(intent);
+
+                PGPClipperSettingsActivity.this.startActivity(intent);
+                Toast.makeText(getApplicationContext(), getString(R.string.battery_optimazation_information_toast), Toast.LENGTH_LONG).show();
+            }
+
+        }
     }
 
     @Override

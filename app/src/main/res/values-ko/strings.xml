@@ -56,4 +56,5 @@
     <string name="alternativeAuthenticationMethodNFCText">NFC 토큰</string>
     <string name="channel_name">PGPClipper 클립보드 알림 채널</string>
     <string name="channel_description">PGP 데이터 블럭이 감지되었을 수 있을 때 유저에게 알립니다</string>
+    <string name="battery_optimazation_information_toast">안드로이드 M 부터 PGPClipper는 백그라운드에서 클립보드를 읽기 위해 유저가 배터리 최적화를 끄는 것을 필요로 합니다. 배터리 최적화를 비활성화 해 주세요.</string>
 </resources>
