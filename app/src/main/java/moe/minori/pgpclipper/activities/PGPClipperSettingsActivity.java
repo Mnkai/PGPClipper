@@ -211,7 +211,32 @@ public class PGPClipperSettingsActivity extends Activity {
                 PGPClipperSettingsActivity.this.startActivity(intent);
                 Toast.makeText(getApplicationContext(), getString(R.string.battery_optimazation_information_toast), Toast.LENGTH_LONG).show();
             }
+        }
 
+        // Check AES-ECB vulnerability mitigation
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        final SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        if (!sharedPreferences.getBoolean("AESECBVulnMitigated", false))
+        {
+            Log.d("PGPClipSettingsActivity", "First run since AES algorithm change - flushing key database");
+
+            // Since implementation before 0.22 was not suitable (AES-ECB), remove NFC key encryption data and start from scratch
+            CheckBoxPreference nfcPref = (CheckBoxPreference) fragment.findPreference("enableNFCAuth");
+
+            if (nfcPref.isChecked())
+            {
+                Toast.makeText(getApplicationContext(), getString(R.string.aes_key_init_notice_toast), Toast.LENGTH_LONG).show();
+            }
+
+            nfcPref.setChecked(false);
+
+            // Listener should fire to remove data, but just to make sure...
+            NFCAuthenticationSetupActivity.initSetting(editor);
+
+            editor.putBoolean("AESECBVulnMitigated", true);
+
+            editor.apply();
         }
     }
 

@@ -16,7 +16,7 @@ public class AESHelper {
     public static byte[] encrypt (byte[] input, byte[] key)
             throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
         SecretKeySpec keySpec = new SecretKeySpec(key, "AES");
-        Cipher cipher = Cipher.getInstance("AES");
+        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
         cipher.init(Cipher.ENCRYPT_MODE, keySpec);
         return cipher.doFinal(input);
     }
@@ -24,7 +24,7 @@ public class AESHelper {
     public static byte[] decrypt (byte[] input, byte[] key)
             throws InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException, BadPaddingException, IllegalBlockSizeException {
         SecretKeySpec keySpec = new SecretKeySpec(key, "AES");
-        Cipher cipher = Cipher.getInstance("AES");
+        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
         cipher.init(Cipher.DECRYPT_MODE, keySpec);
         return cipher.doFinal(input);
     }

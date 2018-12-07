@@ -61,4 +61,5 @@
     <string name="channel_name">PGPClipper clipboard notification channel</string>
     <string name="channel_description">Notifies user about possible PGP data block detection</string>
     <string name="battery_optimazation_information_toast">From Android M, PGPClipper requires user to disable battery optimization in order to read clipboard data in the background. Please disable battery optimization.</string>
+    <string name="aes_key_init_notice_toast">AES implementation before version 0.22 was not suitable (AES-ECB), removing encrypted PGP key password cache from device.</string>
 </resources>

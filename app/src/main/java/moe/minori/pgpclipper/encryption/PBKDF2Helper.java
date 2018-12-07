@@ -14,11 +14,11 @@ import java.security.spec.InvalidKeySpecException;
 public class PBKDF2Helper {
     // Algorithm Strength Factors
 
-    public static final String PBKDF2_ALGORITHM = "PBKDF2WithHmacSHA1";
+    private static final String PBKDF2_ALGORITHM = "PBKDF2WithHmacSHA1";
 
-    public static final int SALT_LENGTH = 64;
-    public static final int HASH_LENGTH = 256;
-    public static final int PBKDF2_ITERATIONS = 1000;
+    private static final int SALT_LENGTH = 64;
+    private static final int HASH_LENGTH = 256;
+    private static final int PBKDF2_ITERATIONS = 1000;
 
     private static byte[] doPBKDF2 (char[] password, byte[] salt, int iterations, int bits)
             throws NoSuchAlgorithmException, InvalidKeySpecException {
