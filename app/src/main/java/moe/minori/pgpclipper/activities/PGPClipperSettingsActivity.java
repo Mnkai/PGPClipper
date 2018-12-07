@@ -196,13 +196,15 @@ public class PGPClipperSettingsActivity extends Activity {
         themePref.setEntries(R.array.themes);
 
         String currentVal = sharedPreferences.getString("themeSelection", "dark");
-        switch (currentVal) {
-            case "dark":
-                themePref.setSummary(getResources().getString(R.string.darkText));
-                break;
-            case "light":
-                themePref.setSummary(getResources().getString(R.string.lightText));
-                break;
+        if (currentVal != null) {
+            switch (currentVal) {
+                case "dark":
+                    themePref.setSummary(getResources().getString(R.string.darkText));
+                    break;
+                case "light":
+                    themePref.setSummary(getResources().getString(R.string.lightText));
+                    break;
+            }
         }
 
         String providerApp = sharedPreferences.getString("pgpServiceProviderApp", null);
