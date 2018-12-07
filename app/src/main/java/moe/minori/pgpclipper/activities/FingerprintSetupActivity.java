@@ -1,5 +1,6 @@
 package moe.minori.pgpclipper.activities;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -12,6 +13,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+
+import java.util.Objects;
 
 import co.infinum.goldfinger.Error;
 import co.infinum.goldfinger.Goldfinger;
@@ -37,8 +40,20 @@ public class FingerprintSetupActivity extends Activity {
     Goldfinger goldfinger = null;
     RelativeLayout parent;
 
+    @SuppressLint("CommitPrefEdits")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+        if ( Objects.requireNonNull(sharedPreferences.getString("themeSelection", "dark")).equals("dark") )
+        {
+            setTheme(R.style.AppThemeDark);
+        }
+        else
+        {
+            setTheme(R.style.AppTheme);
+        }
+
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.wizardlayout);
@@ -48,7 +63,6 @@ public class FingerprintSetupActivity extends Activity {
 
         layoutInflater(stage);
 
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         editor = sharedPreferences.edit();
 
         goldfinger = new Goldfinger.Builder(this).build();

@@ -22,6 +22,7 @@ import android.widget.Toast;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.Objects;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -57,6 +58,17 @@ public class NFCAuthenticationSetupActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+        if ( Objects.requireNonNull(sharedPreferences.getString("themeSelection", "dark")).equals("dark") )
+        {
+            setTheme(R.style.AppThemeDark);
+        }
+        else
+        {
+            setTheme(R.style.AppTheme);
+        }
+
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.wizardlayout);

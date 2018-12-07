@@ -15,6 +15,7 @@ import android.util.Log;
 
 import java.security.KeyStore;
 import java.security.KeyStoreException;
+import java.util.Objects;
 
 import androidx.annotation.Nullable;
 import co.infinum.goldfinger.Goldfinger;
@@ -28,6 +29,16 @@ public class PGPClipperSettingsActivity extends Activity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+        if ( Objects.requireNonNull(sharedPreferences.getString("themeSelection", "dark")).equals("dark") )
+        {
+            setTheme(R.style.AppThemeDark);
+        }
+        else
+        {
+            setTheme(R.style.AppTheme);
+        }
         super.onCreate(savedInstanceState);
 
         getFragmentManager().beginTransaction().replace(android.R.id.content, fragment = new SettingFragment()).commit();
@@ -119,6 +130,7 @@ public class PGPClipperSettingsActivity extends Activity {
                         break;
                 }
 
+                PGPClipperSettingsActivity.this.recreate();
                 return true;
             }
         };
