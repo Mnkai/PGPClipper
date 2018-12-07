@@ -12,6 +12,8 @@ import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
 
+import java.util.Objects;
+
 import androidx.core.app.NotificationCompat;
 import moe.minori.pgpclipper.activities.PGPClipperResultShowActivity;
 import moe.minori.pgpclipper.util.PGPBlockDetector;
@@ -63,10 +65,10 @@ public class PGPClipperService extends Service {
                     // get current clipboard data to string
                     String currentData;
 
-                    if (clipboardManager.hasPrimaryClip() && clipboardManager.getPrimaryClipDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
+                    if (clipboardManager.hasPrimaryClip() && Objects.requireNonNull(clipboardManager.getPrimaryClipDescription()).hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
 
                         try {
-                            currentData = clipboardManager.getPrimaryClip().getItemAt(0).getText().toString();
+                            currentData = Objects.requireNonNull(clipboardManager.getPrimaryClip()).getItemAt(0).getText().toString();
                         } catch (NullPointerException e) {
                             // should not happen since clipboard contains text, but returned null.
                             // best effort String parsing
