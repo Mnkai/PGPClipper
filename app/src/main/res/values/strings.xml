@@ -58,4 +58,6 @@
     <string name="nfcDisabledString">Enable NFC in settings</string>
     <string name="alternativeAuthenticationMethodNFCText">Tap NFC token</string>
     <string name="alternativeAuthenticationMethodFingerprintText">Touch fingerprint scanner</string>
+    <string name="channel_name">PGPClipper clipboard notification channel</string>
+    <string name="channel_description">Notifies user about possible PGP data block detection</string>
 </resources>
