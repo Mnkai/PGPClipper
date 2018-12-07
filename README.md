@@ -9,11 +9,10 @@ PGPClipper monitors user clipboard, and notifies the user when possible PGP data
 Build using Android Studio. Or visit F-Droid for prebuilt release.
 
 ## Contribution
-You can help translating this app in different languages. Visit https://www.transifex.com/mnetwork/pgpclipper/ for Transifex translation dashboard.
-For other improvements, please use PRs and issues.
+You can help translating this app in different languages. Please use PRs and issues.
 
 ## F-Droid
-https://f-droid.org/repository/browse/?fdfilter=pgpclipper&fdid=moe.minori.pgpclipper
+https://f-droid.org/en/packages/moe.minori.pgpclipper/
 
 ## Third Party Licenses
 OpenPGP API Library, Apache License 2.0
@@ -24,4 +23,4 @@ Goldfinger - Apache License 2.0
 Apache License 2.0, see LICENSE for more details and full license.
 
 ## Contributers
-Look at contributers tab in repository information. For translation contributers, visit https://www.transifex.com/mnetwork/teams/55577/
+Look at contributers tab in repository information. For previous translation contributers, you may visit https://www.transifex.com/mnetwork/teams/55577/
