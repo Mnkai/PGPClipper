@@ -54,4 +54,6 @@
     <string name="nfcDisabledString">설정에서 NFC를 활성화하세요</string>
     <string name="alternativeAuthenticationMethodFingerprintText">지문 인식 센서</string>
     <string name="alternativeAuthenticationMethodNFCText">NFC 토큰</string>
+    <string name="channel_name">PGPClipper 클립보드 알림 채널</string>
+    <string name="channel_description">PGP 데이터 블럭이 감지되었을 수 있을 때 유저에게 알립니다</string>
 </resources>
