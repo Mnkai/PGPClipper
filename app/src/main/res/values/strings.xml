@@ -3,7 +3,7 @@
     <string name="enabledService">Enable Service</string>
     <string name="enabledServiceSummary">Check this box to allow PGPClipper stay alive in background.\nNote that this application *will* access clipboard data.</string>
     <string name="pgpServiceProviderAppTitleString">OpenPGP Service Provider status</string>
-    <string name="appVersionString" translatable="false">0.21</string>
+    <string name="appVersionString" translatable="false">0.22</string>
     <string name="appVersionTitleString">Version</string>
     <string name="licenseTitleString">License</string>
     <string name="licenseContentString" translatable="false">Apache License 2.0</string>
