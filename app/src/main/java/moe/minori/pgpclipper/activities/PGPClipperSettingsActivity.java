@@ -1,6 +1,5 @@
 package moe.minori.pgpclipper.activities;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -38,7 +37,7 @@ public class PGPClipperSettingsActivity extends Activity {
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
-        fragment.findPreference("pgpClipperEnabledCheckbox").setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+        Preference.OnPreferenceChangeListener pgpClipperEnabledCheckboxListener = new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
 
@@ -50,9 +49,9 @@ public class PGPClipperSettingsActivity extends Activity {
                     stopService(new Intent(PGPClipperSettingsActivity.this, PGPClipperService.class));
                 return true;
             }
-        });
+        };
 
-        fragment.findPreference("issueTrackerPreferenceItem").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        Preference.OnPreferenceClickListener issueTrackerPreferenceItemListener = new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
 
@@ -62,9 +61,9 @@ public class PGPClipperSettingsActivity extends Activity {
 
                 return true;
             }
-        });
+        };
 
-        fragment.findPreference("licensePreferenceItem").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        Preference.OnPreferenceClickListener licensePreferenceItemListener = new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
 
@@ -74,9 +73,9 @@ public class PGPClipperSettingsActivity extends Activity {
 
                 return true;
             }
-        });
+        };
 
-        fragment.findPreference("thirdPartyLicensePreferenceItem").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        Preference.OnPreferenceClickListener thirdPartyLicensePreferenceItemListener = new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
 
@@ -86,12 +85,112 @@ public class PGPClipperSettingsActivity extends Activity {
 
                 return true;
             }
-        });
+        };
 
-        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        final SharedPreferences.Editor editor = sharedPreferences.edit();
+        Preference.OnPreferenceChangeListener pgpServiceProviderAppListener = new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                String providerApp = (String) newValue;
+                final CheckBoxPreference pgpClipperEnabledCheckbox = (CheckBoxPreference) fragment.findPreference("pgpClipperEnabledCheckbox");
+
+                if (providerApp == null || "".equals(providerApp)) {
+                    pgpClipperEnabledCheckbox.setEnabled(false);
+                    pgpClipperEnabledCheckbox.setChecked(false);
+                    stopService(new Intent(PGPClipperSettingsActivity.this, PGPClipperService.class));
+                } else {
+                    pgpClipperEnabledCheckbox.setEnabled(true);
+                }
+                return true;
+            }
+        };
+
+        Preference.OnPreferenceChangeListener themePrefListener = new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+
+                final ListPreference themePref = (ListPreference) fragment.findPreference("themeSelection");
+
+                switch ((String) newValue) {
+                    case "dark":
+                        themePref.setSummary(getResources().getString(R.string.darkText));
+                        break;
+                    case "light":
+                        themePref.setSummary(getResources().getString(R.string.lightText));
+                        break;
+                }
+
+                return true;
+            }
+        };
+
+        Preference.OnPreferenceChangeListener NFCAuthPrefListener = new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                if (!((boolean) newValue)) {
+                    // delete current hash and encrypted data
+                    final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    final SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                    NFCAuthenticationSetupActivity.initSetting(editor);
+                } else {
+                    // start NFCAuthSetupActivity
+                    Intent intent = new Intent(PGPClipperSettingsActivity.this, NFCAuthenticationSetupActivity.class);
+
+                    startActivityForResult(intent, Constants.NFC_SETUP_REQUEST_CODE);
+                }
+                return true;
+            }
+        };
+
+        Preference.OnPreferenceChangeListener fingerprintAuthPrefListener = new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                if (!((boolean) newValue)) {
+                    try {
+                        KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
+                        keyStore.deleteEntry(Constants.FINGERPRINT_KEYNAME);
+                    } catch (KeyStoreException e) {
+                        e.printStackTrace();
+
+                        // I tried my best, key will be overwritten in next setup anyway...
+                    }
+
+
+                } else {
+                    Goldfinger goldfinger = new Goldfinger.Builder(PGPClipperSettingsActivity.this).build();
+
+                    if (!goldfinger.hasFingerprintHardware() || !goldfinger.hasEnrolledFingerprint())
+                        return false;
+
+                    // Will be able to continue (hopefully), start fingerprint setup activity
+
+                    Intent intent = new Intent(PGPClipperSettingsActivity.this, FingerprintSetupActivity.class);
+
+                    startActivityForResult(intent, Constants.FINGERPRINT_SETUP_REQUEST_CODE);
+                }
+                return true;
+            }
+        };
+
+        fragment.findPreference("pgpClipperEnabledCheckbox").setOnPreferenceChangeListener(pgpClipperEnabledCheckboxListener);
+        fragment.findPreference("issueTrackerPreferenceItem").setOnPreferenceClickListener(issueTrackerPreferenceItemListener);
+        fragment.findPreference("licensePreferenceItem").setOnPreferenceClickListener(licensePreferenceItemListener);
+        fragment.findPreference("thirdPartyLicensePreferenceItem").setOnPreferenceClickListener(thirdPartyLicensePreferenceItemListener);
+        fragment.findPreference("themeSelection").setOnPreferenceChangeListener(themePrefListener);
+        fragment.findPreference("pgpServiceProviderApp").setOnPreferenceChangeListener(pgpServiceProviderAppListener);
+        fragment.findPreference("enableNFCAuth").setOnPreferenceChangeListener(NFCAuthPrefListener);
+        fragment.findPreference("enableFingerprintAuth").setOnPreferenceChangeListener(fingerprintAuthPrefListener);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
 
         final ListPreference themePref = (ListPreference) fragment.findPreference("themeSelection");
+
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        final CheckBoxPreference fingerprintCheckboxPreference = (CheckBoxPreference) fragment.findPreference("enableFingerprintAuth");
+        final CheckBoxPreference pgpClipperEnabledCheckbox = (CheckBoxPreference) fragment.findPreference("pgpClipperEnabledCheckbox");
 
         themePref.setEntryValues(R.array.themes_values);
         themePref.setEntries(R.array.themes);
@@ -106,39 +205,6 @@ public class PGPClipperSettingsActivity extends Activity {
                 break;
         }
 
-        themePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-
-                switch ((String) newValue) {
-                    case "dark":
-                        themePref.setSummary(getResources().getString(R.string.darkText));
-                        break;
-                    case "light":
-                        themePref.setSummary(getResources().getString(R.string.lightText));
-                        break;
-                }
-
-                return true;
-            }
-        });
-
-        final CheckBoxPreference pgpClipperEnabledCheckbox = (CheckBoxPreference) fragment.findPreference("pgpClipperEnabledCheckbox");
-
-        fragment.findPreference("pgpServiceProviderApp").setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                String providerApp = (String) newValue;
-                if (providerApp == null || "".equals(providerApp)) {
-                    pgpClipperEnabledCheckbox.setEnabled(false);
-                    pgpClipperEnabledCheckbox.setChecked(false);
-                    stopService(new Intent(PGPClipperSettingsActivity.this, PGPClipperService.class));
-                } else {
-                    pgpClipperEnabledCheckbox.setEnabled(true);
-                }
-                return true;
-            }
-        });
         String providerApp = sharedPreferences.getString("pgpServiceProviderApp", null);
         if (providerApp == null || "".equals(providerApp)) {
             pgpClipperEnabledCheckbox.setEnabled(false);
@@ -151,64 +217,13 @@ public class PGPClipperSettingsActivity extends Activity {
             pgpClipperEnabledCheckbox.setEnabled(true);
         }
 
-        // for NFC authentication
-
-        fragment.findPreference("enableNFCAuth").setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                if (!((boolean) newValue)) {
-                    // delete current hash and encrypted data
-
-                    NFCAuthenticationSetupActivity.initSetting(editor);
-                } else {
-                    // start NFCAuthSetupActivity
-                    Intent intent = new Intent(PGPClipperSettingsActivity.this, NFCAuthenticationSetupActivity.class);
-
-                    startActivityForResult(intent, Constants.NFC_SETUP_REQUEST_CODE);
-                }
-                return true;
-            }
-        });
-
-        // For Fingerprint authentication
-
-        final CheckBoxPreference fingerprintCheckboxPreference = (CheckBoxPreference) fragment.findPreference("enableFingerprintAuth");
-
         if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.M) // Fingerprint API not supported below M
             fingerprintCheckboxPreference.setEnabled(false);
         else {
-            fragment.findPreference("enableFingerprintAuth").setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-
-                @SuppressLint("NewApi")
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    if (!((boolean) newValue)) {
-                        try {
-                            KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-                            keyStore.deleteEntry(Constants.FINGERPRINT_KEYNAME);
-                        } catch (KeyStoreException e) {
-                            e.printStackTrace();
-
-                            // I tried my best, key will be overwritten in next setup anyway...
-                        }
+            fingerprintCheckboxPreference.setEnabled(true);
+            }
 
 
-                    } else {
-                        Goldfinger goldfinger = new Goldfinger.Builder(PGPClipperSettingsActivity.this).build();
-
-                        if (!goldfinger.hasFingerprintHardware() || !goldfinger.hasEnrolledFingerprint())
-                            return false;
-
-                        // Will be able to continue (hopefully), start fingerprint setup activity
-
-                        Intent intent = new Intent(PGPClipperSettingsActivity.this, FingerprintSetupActivity.class);
-
-                        startActivityForResult(intent, Constants.FINGERPRINT_SETUP_REQUEST_CODE);
-                    }
-                    return true;
-                }
-            });
-        }
     }
 
     @Override
